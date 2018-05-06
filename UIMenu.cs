@@ -1424,7 +1424,7 @@ namespace NativeUI
         /// </summary>
         public void GoLeft()
         {
-            if (!(MenuItems[CurrentSelection] is UIMenuListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderItem)) return;
+            if (!(MenuItems[CurrentSelection] is UIMenuListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderItem) && !(MenuItems[CurrentSelection] is UIMenuDynamicListItem)) return;
             
             
             if (MenuItems[CurrentSelection] is UIMenuListItem)
@@ -1459,7 +1459,7 @@ namespace NativeUI
         /// </summary>
         public void GoRight()
         {
-            if (!(MenuItems[CurrentSelection] is UIMenuListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderItem)) return;
+            if (!(MenuItems[CurrentSelection] is UIMenuListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderItem) && !(MenuItems[CurrentSelection] is UIMenuDynamicListItem)) return;
 
             if (MenuItems[CurrentSelection] is UIMenuListItem)
             {
