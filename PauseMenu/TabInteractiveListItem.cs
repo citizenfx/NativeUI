@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Font = CitizenFX.Core.UI.Font;
 using CitizenFX.Core;
-using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 
 namespace NativeUI.PauseMenu
 {
@@ -89,13 +89,13 @@ namespace NativeUI.PauseMenu
 
             if (Game.IsControlJustPressed(0, Control.FrontendAccept) && Focused && Items[Index] is UIMenuCheckboxItem)
             {
-                Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
+                PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
                 ((UIMenuCheckboxItem)Items[Index]).Checked = !((UIMenuCheckboxItem)Items[Index]).Checked;
                 ((UIMenuCheckboxItem)Items[Index]).CheckboxEventTrigger();
             }
             else if (Game.IsControlJustPressed(0, Control.FrontendAccept) && Focused)
             {
-                Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
+                PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
                 Items[Index].ItemActivate(null);
             }
 
@@ -103,7 +103,7 @@ namespace NativeUI.PauseMenu
             {
                 var it = (UIMenuListItem)Items[Index];
                 it.Index--;
-                Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
+                PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
                 it.ListChangedTrigger(it.Index);
             }
 
@@ -111,19 +111,19 @@ namespace NativeUI.PauseMenu
             {
                 var it = (UIMenuListItem)Items[Index];
                 it.Index++;
-                Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
+                PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
                 it.ListChangedTrigger(it.Index);
             }
 
             if (Game.IsControlJustPressed(0, Control.FrontendUp) || Game.IsControlJustPressed(0, Control.MoveUpOnly) || Game.IsControlJustPressed(0, Control.CursorScrollUp))
             {
-                Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
+                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
                 MoveUp();
             }
 
             else if (Game.IsControlJustPressed(0, Control.FrontendDown) || Game.IsControlJustPressed(0, Control.MoveDownOnly) || Game.IsControlJustPressed(0, Control.CursorScrollDown))
             {
-                Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
+                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
                 MoveDown();
             }
         }
@@ -248,18 +248,18 @@ namespace NativeUI.PauseMenu
                     bool open = Index == c;
                     Index = (1000 - (1000 % Items.Count) + c) % Items.Count;
                     if (!open)
-                        Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
+                        PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
                     else
                     {
                         if (Items[Index] is UIMenuCheckboxItem)
                         {
-                            Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
+                            PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
                             ((UIMenuCheckboxItem)Items[Index]).Checked = !((UIMenuCheckboxItem)Items[Index]).Checked;
                             ((UIMenuCheckboxItem)Items[Index]).CheckboxEventTrigger();
                         }
                         else
                         {
-                            Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
+                            PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
                             Items[Index].ItemActivate(null);
                         }
                     }

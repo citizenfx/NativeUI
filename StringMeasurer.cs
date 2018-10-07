@@ -118,9 +118,10 @@ namespace NativeUI
             return output;
         }
 
-        public static float MeasureString(string input, CitizenFX.Core.UI.Font font, float scale)
+        //public static float MeasureString(string input, CitizenFX.Core.UI.Font font, float scale)
+        public static float MeasureString(string input, bool p0, float scale) 
         {
-            return UIResText.MeasureStringWidth(input, font, scale);
+            return UIResText.MeasureStringWidth(input, p0, scale);
         }
     }
 }

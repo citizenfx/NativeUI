@@ -3,6 +3,7 @@ using System.Drawing;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Font = CitizenFX.Core.UI.Font;
+using static CitizenFX.Core.Native.API;
 
 namespace NativeUI
 {
@@ -58,7 +59,7 @@ namespace NativeUI
             for (int i = 0; i < input.Length; i += maxByteLengthPerString)
             {
                 string substr = (input.Substring(i, Math.Min(maxByteLengthPerString, input.Length - i)));
-                CitizenFX.Core.Native.Function.Call(Hash._ADD_TEXT_COMPONENT_STRING, substr);
+                AddTextComponentString(substr);
             }
         }
 
@@ -80,7 +81,7 @@ namespace NativeUI
             var utf8ByteCount = enc.GetByteCount(input);
             if (utf8ByteCount < maxByteLengthPerString)
             {
-                Function.Call(Hash._ADD_TEXT_COMPONENT_STRING, input);
+                AddTextComponentString(input);
                 return;
             }
 
@@ -92,16 +93,17 @@ namespace NativeUI
                 if (enc.GetByteCount(input.Substring(startIndex, length)) > maxByteLengthPerString)
                 {
                     string substr = (input.Substring(startIndex, length - 1));
-                    Function.Call(Hash._ADD_TEXT_COMPONENT_STRING, substr);
+                    AddTextComponentString(substr);
 
                     i -= 1;
                     startIndex = (startIndex + length - 1);
                 }
             }
-            Function.Call(Hash._ADD_TEXT_COMPONENT_STRING, input.Substring(startIndex, input.Length - startIndex));
+            AddTextComponentString(input.Substring(startIndex, input.Length - startIndex));
         }
 
-        public static float MeasureStringWidth(string str, Font font, float scale)
+        //public static float MeasureStringWidth(string str, Font font, float scale)
+        public static float MeasureStringWidth(string str, bool p0, float scale)
         {
             int screenw = Screen.Resolution.Width;
             int screenh = Screen.Resolution.Height;
@@ -109,14 +111,15 @@ namespace NativeUI
             const float height = 1080f;
             float ratio = (float)screenw / screenh;
             float width = height * ratio;
-            return MeasureStringWidthNoConvert(str, font, scale) * width;
+            return MeasureStringWidthNoConvert(str, p0, scale) * width;
         }
 
-        public static float MeasureStringWidthNoConvert(string str, Font font, float scale)
+        //public static float MeasureStringWidthNoConvert(string str, Font font, float scale)
+        public static float MeasureStringWidthNoConvert(string str, bool p0, float scale)
         {
-            Function.Call((Hash)0x54CE8AC98E120CAB, "STRING");
+            BeginTextCommandWidth("STRING");
             AddLongString(str);
-            return Function.Call<float>((Hash)0x85F061DA64ED2F67, (int)font) * scale;
+            return EndTextCommandGetWidth(p0) * scale;
         }
 
         public SizeF WordWrap { get; set; }
@@ -132,34 +135,34 @@ namespace NativeUI
             float x = (Position.X) / width;
             float y = (Position.Y) / height;
 
-            Function.Call(Hash.SET_TEXT_FONT, (int)Font);
-            Function.Call(Hash.SET_TEXT_SCALE, 1.0f, Scale);
-            Function.Call(Hash.SET_TEXT_COLOUR, Color.R, Color.G, Color.B, Color.A);
+            SetTextFont((int)Font);
+            SetTextScale(1.0f, Scale);
+            SetTextColour(Color.R, Color.G, Color.B, Color.A);
             if (DropShadow)
-                Function.Call(Hash.SET_TEXT_DROP_SHADOW);
+                SetTextDropShadow();
             if (Outline)
-                Function.Call(Hash.SET_TEXT_OUTLINE);
+                SetTextOutline();
             switch (TextAlignment)
             {
                 case Alignment.Centered:
-                    Function.Call(Hash.SET_TEXT_CENTRE, true);
+                    SetTextCentre(true);
                     break;
                 case Alignment.Right:
-                    Function.Call(Hash.SET_TEXT_RIGHT_JUSTIFY, true);
-                    Function.Call(Hash.SET_TEXT_WRAP, 0, x);
+                    SetTextRightJustify(true);
+                    SetTextWrap(0, x);
                     break;
             }
 
             if (WordWrap.Width != 0)
             {
                 float xsize = (Position.X + WordWrap.Width) / width;
-                Function.Call(Hash.SET_TEXT_WRAP, x, xsize);
+                SetTextWrap(x, xsize);
             }
 
-            Function.Call(Hash._SET_TEXT_ENTRY, "jamyfafi");
+            SetTextEntry("CELL_EMAIL_BCON");
             AddLongString(Caption);
 
-            Function.Call(Hash._DRAW_TEXT, x, y);
+            DrawText(x, y);
         }
 
         //public static void Draw(string caption, int xPos, int yPos, Font font, float scale, UnknownColors color, Alignment alignment, bool dropShadow, bool outline, int wordWrap)
