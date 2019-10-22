@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading.Tasks;
 
 namespace NativeUI
 {
@@ -57,7 +58,7 @@ namespace NativeUI
         /// <summary>
         /// Draw item.
         /// </summary>
-        public override void Draw()
+        public override async Task Draw()
         {
             base.Draw();
             _checkedSprite.Position = new PointF(380 + Offset.X + Parent.WidthOffset, _checkedSprite.Position.Y);

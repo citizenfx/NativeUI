@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CitizenFX.Core.UI;
+using System;
 using System.Drawing;
+using System.Threading.Tasks;
 
 namespace NativeUI
 {
@@ -8,7 +10,7 @@ namespace NativeUI
     /// </summary>
     public class UIMenuItem
     {
-        protected UIResRectangle _rectangle;
+        internal UIResRectangle _rectangle;
         protected UIResText _text;
         protected Sprite _selectedSprite;
 
@@ -43,14 +45,14 @@ namespace NativeUI
             Enabled = true;
 
             _rectangle = new UIResRectangle(new PointF(0, 0), new SizeF(431, 38), Color.FromArgb(20, 255, 255, 255)); // Color.FromArgb(150, 0, 0, 0)
-            _text = new UIResText(text, new PointF(8, 0), 0.33f, UnknownColors.WhiteSmoke, CitizenFX.Core.UI.Font.ChaletLondon, UIResText.Alignment.Left);
+            _text = new UIResText(text, new PointF(8, 0), 0.33f, Colors.WhiteSmoke, CitizenFX.Core.UI.Font.ChaletLondon, Alignment.Left);
             Description = description;
             _selectedSprite = new Sprite("commonmenu", "gradient_nav", new PointF(0, 0), new SizeF(431, 38));
 
             _badgeLeft = new Sprite("commonmenu", "", new PointF(0, 0), new SizeF(40, 40));
             _badgeRight = new Sprite("commonmenu", "", new PointF(0, 0), new SizeF(40, 40));
 
-            _labelText = new UIResText("", new PointF(0, 0), 0.35f) { TextAlignment = UIResText.Alignment.Right };
+            _labelText = new UIResText("", new PointF(0, 0), 0.35f) { TextAlignment = Alignment.Right };
         }
 
 
@@ -102,7 +104,7 @@ namespace NativeUI
         /// <summary>
         /// Draw this item.
         /// </summary>
-        public virtual void Draw()
+        public virtual async Task Draw()
         {
             _rectangle.Size = new SizeF(431 + Parent.WidthOffset, 38);
             _selectedSprite.Size = new SizeF(431 + Parent.WidthOffset, 38);
@@ -115,7 +117,7 @@ namespace NativeUI
             if (Selected)
                 _selectedSprite.Draw();
 
-            _text.Color = Enabled ? (Selected ? UnknownColors.Black : UnknownColors.WhiteSmoke) : _disabledColor; // No alloc anymore there
+            _text.Color = Enabled ? (Selected ? Colors.Black : Colors.WhiteSmoke) : _disabledColor; // No alloc anymore there
 
             if (LeftBadge == BadgeStyle.None)
             {
@@ -143,7 +145,7 @@ namespace NativeUI
             {
                 _labelText.Position = new PointF(420 + Offset.X + Parent.WidthOffset, _labelText.Position.Y);
                 _labelText.Caption = RightLabel;
-                _labelText.Color = _text.Color = Enabled ? (Selected ? UnknownColors.Black : UnknownColors.WhiteSmoke) : _disabledColor; // No alloc anymore there
+                _labelText.Color = _text.Color = Enabled ? (Selected ? Colors.Black : Colors.WhiteSmoke) : _disabledColor; // No alloc anymore there
                 _labelText.Draw();
             }
 

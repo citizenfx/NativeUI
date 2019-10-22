@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using CitizenFX.Core.UI;
 
 namespace NativeUI
@@ -47,6 +48,8 @@ namespace NativeUI
 			}
 		}
 
+		public List<UIMenuPanel> Panels = new List<UIMenuPanel>();
+
 
 		/// <summary>
 		/// List item, with left/right arrows.
@@ -54,8 +57,7 @@ namespace NativeUI
 		/// <param name="text">Item label.</param>
 		/// <param name="items">List that contains your items.</param>
 		/// <param name="index">Index in the list. If unsure user 0.</param>
-		public UIMenuListItem(string text, List<dynamic> items, int index)
-            : this(text, items, index, "")
+		public UIMenuListItem(string text, List<dynamic> items, int index) : this(text, items, index, "")
         {
         }
 
@@ -66,16 +68,15 @@ namespace NativeUI
         /// <param name="items">List that contains your items.</param>
         /// <param name="index">Index in the list. If unsure user 0.</param>
         /// <param name="description">Description for this item.</param>
-        public UIMenuListItem(string text, List<dynamic> items, int index, string description)
-            : base(text, description)
+        public UIMenuListItem(string text, List<dynamic> items, int index, string description) : base(text, description)
         {
             const int y = 0;
             _items = items;
             _arrowLeft = new Sprite("commonmenu", "arrowleft", new PointF(110, 105 + y), new SizeF(30, 30));
             _arrowRight = new Sprite("commonmenu", "arrowright", new PointF(280, 105 + y), new SizeF(30, 30));
-            _itemText = new UIResText("", new PointF(290, y + 104), 0.35f, UnknownColors.White, CitizenFX.Core.UI.Font.ChaletLondon,
-                UIResText.Alignment.Left)
-            { TextAlignment = UIResText.Alignment.Right };
+            _itemText = new UIResText("", new PointF(290, y + 104), 0.35f, Colors.White, CitizenFX.Core.UI.Font.ChaletLondon,
+                Alignment.Left)
+            { TextAlignment = Alignment.Right };
             Index = index;
         }
 
@@ -93,44 +94,46 @@ namespace NativeUI
         }
 
 
-        /// <summary>
-        /// Find an item in the list and return it's index.
-        /// </summary>
-        /// <param name="item">Item to search for.</param>
-        /// <returns>Item index.</returns>
-        public virtual int ItemToIndex(dynamic item)
+		/// <summary>
+		/// Find an item in the list and return it's index.
+		/// </summary>
+		/// <param name="item">Item to search for.</param>
+		/// <returns>Item index.</returns>
+		[Obsolete("Use UIMenuListItem.Items.FindIndex(p => ReferenceEquals(p, item)) instead.")]
+		public virtual int ItemToIndex(dynamic item)
         {
             return _items.FindIndex(p => ReferenceEquals(p, item));
         }
 
 
-        /// <summary>
-        /// Find an item by it's index and return the item.
-        /// </summary>
-        /// <param name="index">Item's index.</param>
-        /// <returns>Item</returns>
-        public virtual dynamic IndexToItem(int index)
+		/// <summary>
+		/// Find an item by it's index and return the item.
+		/// </summary>
+		/// <param name="index">Item's index.</param>
+		/// <returns>Item</returns>
+		[Obsolete("Use UIMenuListItem.Items[Index] instead.")]
+		public virtual dynamic IndexToItem(int index)
         {
             return _items[index];
         }
 
 
-        /// <summary>
-        /// Draw item.
-        /// </summary>
-        public override void Draw()
-        {
-            base.Draw();
+		/// <summary>
+		/// Draw item.
+		/// </summary>
+		public override async Task Draw()
+		{
+			base.Draw();
 
             string caption = _items[Index].ToString();
-            float offset = StringMeasurer.MeasureString(caption);
+            float offset = ScreenTools.GetTextWidth(caption, _itemText.Font, _itemText.Scale);
 
-            _itemText.Color = Enabled ? Selected ? UnknownColors.Black : UnknownColors.WhiteSmoke : Color.FromArgb(163, 159, 148);
+            _itemText.Color = Enabled ? Selected ? Colors.Black : Colors.WhiteSmoke : Color.FromArgb(163, 159, 148);
 
             _itemText.Caption = caption;
 
-            _arrowLeft.Color = Enabled ? Selected ? UnknownColors.Black : UnknownColors.WhiteSmoke : Color.FromArgb(163, 159, 148);
-            _arrowRight.Color = Enabled ? Selected ? UnknownColors.Black : UnknownColors.WhiteSmoke : Color.FromArgb(163, 159, 148);
+            _arrowLeft.Color = Enabled ? Selected ? Colors.Black : Colors.WhiteSmoke : Color.FromArgb(163, 159, 148);
+            _arrowRight.Color = Enabled ? Selected ? Colors.Black : Colors.WhiteSmoke : Color.FromArgb(163, 159, 148);
 
             _arrowLeft.Position = new PointF(375 - (int)offset + Offset.X + Parent.WidthOffset, _arrowLeft.Position.Y);
             if (Selected)
@@ -166,7 +169,28 @@ namespace NativeUI
             throw new Exception("UIMenuListItem cannot have a right label.");
         }
 
-        public string CurrentItem()
+		/// <summary>
+		/// Add a Panel to the UIMenuListItem
+		/// </summary>
+		/// <param name="panel"></param>
+		public virtual void AddPanel(UIMenuPanel panel)
+		{
+			Panels.Add(panel);
+			panel.SetParentItem(this);
+		}
+
+		/// <summary>
+		/// Removes a panel at a defined Index
+		/// </summary>
+		/// <param name="Index"></param>
+		public virtual void RemovePanelAt(int Index)
+		{
+			Panels.RemoveAt(Index);
+		}
+
+
+		[Obsolete("Use UIMenuListItem.Items[Index].ToString() instead.")]
+		public string CurrentItem()
         {
             return _items[Index].ToString();
         }

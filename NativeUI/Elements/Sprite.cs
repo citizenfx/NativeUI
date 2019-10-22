@@ -72,8 +72,8 @@ namespace NativeUI
         public void Draw()
         {
             if (!Visible) return;
-            if (!Function.Call<bool>(Hash.HAS_STREAMED_TEXTURE_DICT_LOADED, TextureDict))
-                Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, TextureDict, true);
+            if (!API.HasStreamedTextureDictLoaded(TextureDict))
+                API.RequestStreamedTextureDict(TextureDict, true);
 
             int screenw = Screen.Resolution.Width;
             int screenh = Screen.Resolution.Height;
@@ -87,13 +87,13 @@ namespace NativeUI
             float x = (Position.X / width) + w * 0.5f;
             float y = (Position.Y / height) + h * 0.5f;
 
-            Function.Call(Hash.DRAW_SPRITE, TextureDict, TextureName, x, y, w, h, Heading, Color.R, Color.G, Color.B, Color.A);
+            API.DrawSprite(TextureDict, TextureName, x, y, w, h, Heading, Color.R, Color.G, Color.B, Color.A);
         }
 
         public static void Draw(string dict, string name, int xpos, int ypos, int boxWidth, int boxHeight, float rotation, Color color)
         {
-            if (!Function.Call<bool>(Hash.HAS_STREAMED_TEXTURE_DICT_LOADED, dict))
-                Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, dict, true);
+            if (!API.HasStreamedTextureDictLoaded(dict))
+                API.RequestStreamedTextureDict(dict, true);
 
             int screenw = Screen.Resolution.Width;
             int screenh = Screen.Resolution.Height;
@@ -107,7 +107,7 @@ namespace NativeUI
             float x = (xpos / width) + w * 0.5f;
             float y = (ypos / height) + h * 0.5f;
 
-            Function.Call(Hash.DRAW_SPRITE, dict, name, x, y, w, h, rotation, color.R, color.G, color.B, color.A);
+            API.DrawSprite(dict, name, x, y, w, h, rotation, color.R, color.G, color.B, color.A);
         }
 
         /*

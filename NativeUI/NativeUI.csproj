@@ -43,12 +43,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigMessage.cs" />
+    <Compile Include="Controls.cs" />
     <Compile Include="Elements\Sprite.cs" />
     <Compile Include="Elements\TimerBars.cs" />
     <Compile Include="Elements\UIResRectangle.cs" />
     <Compile Include="Elements\UIResText.cs" />
+    <Compile Include="Items\UIMenuProgressItem.cs" />
+    <Compile Include="Items\UIMenuSeparatorItem.cs" />
+    <Compile Include="Items\UIMenuSliderHeritageItem.cs" />
     <Compile Include="Items\UIMenuSliderItem.cs" />
-    <Compile Include="UnknownColors.cs" />
+    <Compile Include="Colors.cs" />
     <Compile Include="InstructionalButton.cs" />
     <Compile Include="Items\IListItem.cs" />
     <Compile Include="Items\UIMenuCheckboxItem.cs" />
@@ -57,6 +61,13 @@
     <Compile Include="Items\UIMenuItem.cs" />
     <Compile Include="Items\UIMenuListItem.cs" />
     <Compile Include="MenuPool.cs" />
+    <Compile Include="Panels\UIMenuColorPanel.cs" />
+    <Compile Include="Panels\UIMenuGridPanel.cs" />
+    <Compile Include="Panels\UIMenuHorizontalOneLineGridPanel.cs" />
+    <Compile Include="Panels\UIMenuPanel.cs" />
+    <Compile Include="Panels\UIMenuPercentagePanel.cs" />
+    <Compile Include="Panels\UIMenuStatisticsPanel.cs" />
+    <Compile Include="Panels\UIMenuVerticalOneLineGridPanel.cs" />
     <Compile Include="PauseMenu\TabItem.cs" />
     <Compile Include="PauseMenu\TabItemSimpleList.cs" />
     <Compile Include="PauseMenu\TabMissionSelectItem.cs" />
@@ -66,11 +77,15 @@
     <Compile Include="PauseMenu\TabView.cs" />
     <Compile Include="PointExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScreenTools.cs" />
     <Compile Include="StringMeasurer.cs" />
     <Compile Include="UIMenu.cs" />
+    <Compile Include="Windows\UIMenuHeritageWindow.cs" />
+    <Compile Include="Windows\UIMenuWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="stream\NativeUI.ytd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

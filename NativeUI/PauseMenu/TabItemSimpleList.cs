@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CitizenFX.Core.UI;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Font = CitizenFX.Core.UI.Font;
@@ -19,7 +20,7 @@ namespace NativeUI.PauseMenu
         {
             base.Draw();
 
-            var res = UIMenu.GetScreenResolutionMaintainRatio();
+            var res = ScreenTools.ResolutionMaintainRatio;
 
             var alpha = (Focused || !CanBeFocused) ? 180 : 60;
             var blackAlpha = (Focused || !CanBeFocused) ? 200 : 90;
@@ -34,8 +35,8 @@ namespace NativeUI.PauseMenu
 
                 var item = Dictionary.ElementAt(i);
 
-                new UIResText(item.Key, new PointF(TopLeft.X + 6, TopLeft.Y + 5 + (40 * i)), 0.35f, Color.FromArgb(fullAlpha, UnknownColors.White)).Draw();
-                new UIResText(item.Value, new PointF(BottomRight.X - 6, TopLeft.Y + 5 + (40 * i)), 0.35f, Color.FromArgb(fullAlpha, UnknownColors.White), Font.ChaletLondon, UIResText.Alignment.Right).Draw();
+                new UIResText(item.Key, new PointF(TopLeft.X + 6, TopLeft.Y + 5 + (40 * i)), 0.35f, Color.FromArgb(fullAlpha, Colors.White)).Draw();
+                new UIResText(item.Value, new PointF(BottomRight.X - 6, TopLeft.Y + 5 + (40 * i)), 0.35f, Color.FromArgb(fullAlpha, Colors.White), Font.ChaletLondon, Alignment.Right).Draw();
             }
         }
     }

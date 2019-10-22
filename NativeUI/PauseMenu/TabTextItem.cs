@@ -23,23 +23,20 @@ namespace NativeUI.PauseMenu
         {
             base.Draw();
 
-            var res = UIMenu.GetScreenResolutionMaintainRatio();
+            var res = ScreenTools.ResolutionMaintainRatio;
 
             var alpha = (Focused || !CanBeFocused) ? 255 : 200;
 
             if (!string.IsNullOrEmpty(TextTitle))
             {
-                new UIResText(TextTitle, SafeSize.AddPoints(new PointF(40, 20)), 1.5f, Color.FromArgb(alpha, UnknownColors.White)).Draw();
+                new UIResText(TextTitle, SafeSize.AddPoints(new PointF(40, 20)), 1.5f, Color.FromArgb(alpha, Colors.White)).Draw();
             }
 
             if (!string.IsNullOrEmpty(Text))
             {
                 var ww = WordWrap == 0 ? BottomRight.X - TopLeft.X - 40 : WordWrap;
 
-                new UIResText(Text, SafeSize.AddPoints(new PointF(40, 150)), 0.4f, Color.FromArgb(alpha, UnknownColors.White))
-                {
-                    WordWrap = new SizeF((int)ww, 0)
-                }.Draw();
+                new UIResText(Text, SafeSize.AddPoints(new PointF(40, 150)), 0.4f, Color.FromArgb(alpha, Colors.White)) { Wrap = ww }.Draw();
             }
         }
     }

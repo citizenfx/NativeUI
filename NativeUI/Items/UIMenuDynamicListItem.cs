@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CitizenFX.Core.UI;
+using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using Font = CitizenFX.Core.UI.Font;
 
 namespace NativeUI
@@ -39,8 +41,8 @@ namespace NativeUI
             const int y = 0;
             _arrowLeft = new Sprite("commonmenu", "arrowleft", new PointF(110, 105 + y), new SizeF(30, 30));
             _arrowRight = new Sprite("commonmenu", "arrowright", new PointF(280, 105 + y), new SizeF(30, 30));
-            _itemText = new UIResText("", new PointF(290, y + 104), 0.35f, UnknownColors.White, Font.ChaletLondon,
-                UIResText.Alignment.Right);
+            _itemText = new UIResText("", new PointF(290, y + 104), 0.35f, Colors.White, Font.ChaletLondon,
+                Alignment.Right);
 
             CurrentListItem = startingItem;
             Callback = changeCallback;
@@ -59,22 +61,22 @@ namespace NativeUI
             base.Position(y);
         }
 
-        /// <summary>
-        /// Draw item.
-        /// </summary>
-        public override void Draw()
-        {
-            base.Draw();
+		/// <summary>
+		/// Draw item.
+		/// </summary>
+		public override async Task Draw()
+		{
+			base.Draw();
 
             string caption = CurrentListItem;
-            float offset = StringMeasurer.MeasureString(caption);
+            float offset = ScreenTools.GetTextWidth(caption, _itemText.Font, _itemText.Scale);
 
-            _itemText.Color = Enabled ? Selected ? UnknownColors.Black : UnknownColors.WhiteSmoke : Color.FromArgb(163, 159, 148);
+            _itemText.Color = Enabled ? Selected ? Colors.Black : Colors.WhiteSmoke : Color.FromArgb(163, 159, 148);
 
             _itemText.Caption = caption;
 
-            _arrowLeft.Color = Enabled ? Selected ? UnknownColors.Black : UnknownColors.WhiteSmoke : Color.FromArgb(163, 159, 148);
-            _arrowRight.Color = Enabled ? Selected ? UnknownColors.Black : UnknownColors.WhiteSmoke : Color.FromArgb(163, 159, 148);
+            _arrowLeft.Color = Enabled ? Selected ? Colors.Black : Colors.WhiteSmoke : Color.FromArgb(163, 159, 148);
+            _arrowRight.Color = Enabled ? Selected ? Colors.Black : Colors.WhiteSmoke : Color.FromArgb(163, 159, 148);
 
             _arrowLeft.Position = new PointF(375 - (int)offset + Offset.X + Parent.WidthOffset, _arrowLeft.Position.Y);
             if (Selected)

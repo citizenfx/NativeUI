@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using CitizenFX.Core.UI;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace NativeUI
 {
@@ -15,8 +17,8 @@ namespace NativeUI
             MainColor = color;
             HighlightColor = highlightColor;
 
-            TextColor = UnknownColors.White;
-            HighlightedTextColor = UnknownColors.Black;
+            TextColor = Colors.White;
+            HighlightedTextColor = Colors.Black;
 
             Init();
         }
@@ -26,8 +28,8 @@ namespace NativeUI
             MainColor = color;
             HighlightColor = highlightColor;
 
-            TextColor = UnknownColors.White;
-            HighlightedTextColor = UnknownColors.Black;
+            TextColor = Colors.White;
+            HighlightedTextColor = Colors.Black;
 
             Init();
         }
@@ -36,17 +38,17 @@ namespace NativeUI
         {
             _selectedSprite = new Sprite("commonmenu", "gradient_nav", new PointF(0, 0), new SizeF(431, 38), 0, HighlightColor);
             _rectangle = new UIResRectangle(new PointF(0, 0), new SizeF(431, 38), Color.FromArgb(150, 0, 0, 0));
-            _text = new UIResText(Text, new PointF(8, 0), 0.33f, UnknownColors.WhiteSmoke, CitizenFX.Core.UI.Font.ChaletLondon, UIResText.Alignment.Left);
+            _text = new UIResText(Text, new PointF(8, 0), 0.33f, Colors.WhiteSmoke, CitizenFX.Core.UI.Font.ChaletLondon, Alignment.Left);
             Description = Description;
 
             _badgeLeft = new Sprite("commonmenu", "", new PointF(0, 0), new SizeF(40, 40));
             _badgeRight = new Sprite("commonmenu", "", new PointF(0, 0), new SizeF(40, 40));
 
-            _labelText = new UIResText("", new PointF(0, 0), 0.35f) { TextAlignment = UIResText.Alignment.Right };
+            _labelText = new UIResText("", new PointF(0, 0), 0.35f) { TextAlignment = Alignment.Right };
         }
 
 
-        public override void Draw()
+        public override async Task Draw()
         {
             _rectangle.Size = new SizeF(431 + Parent.WidthOffset, 38);
             _selectedSprite.Size = new SizeF(431 + Parent.WidthOffset, 38);

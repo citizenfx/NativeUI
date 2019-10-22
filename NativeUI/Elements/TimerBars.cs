@@ -18,9 +18,9 @@ namespace NativeUI
 
         public virtual void Draw(int interval)
         {
-            SizeF res = UIMenu.GetScreenResolutionMaintainRatio();
-            PointF safe = UIMenu.GetSafezoneBounds();
-            new UIResText(Label, new PointF((int)res.Width - safe.X - 180, (int)res.Height - safe.Y - (30 + (4 * interval))), 0.3f, UnknownColors.White, Font.ChaletLondon, UIResText.Alignment.Right).Draw();
+            SizeF res = ScreenTools.ResolutionMaintainRatio;
+            PointF safe = ScreenTools.SafezoneBounds;
+            new UIResText(Label, new PointF((int)res.Width - safe.X - 180, (int)res.Height - safe.Y - (30 + (4 * interval))), 0.3f, Colors.White, Font.ChaletLondon, Alignment.Right).Draw();
 
             new Sprite("timerbars", "all_black_bg", new PointF((int)res.Width - safe.X - 298, (int)res.Height - safe.Y - (40 + (4 * interval))), new SizeF(300, 37), 0f, Color.FromArgb(180, 255, 255, 255)).Draw();
 
@@ -41,11 +41,11 @@ namespace NativeUI
 
         public override void Draw(int interval)
         {
-            SizeF res = UIMenu.GetScreenResolutionMaintainRatio();
-            PointF safe = UIMenu.GetSafezoneBounds();
+            SizeF res = ScreenTools.ResolutionMaintainRatio;
+            PointF safe = ScreenTools.SafezoneBounds;
 
             base.Draw(interval);
-            new UIResText(Text, new PointF((int)res.Width - safe.X - 10, (int)res.Height - safe.Y - (42 + (4 * interval))), 0.5f, UnknownColors.White, Font.ChaletLondon, UIResText.Alignment.Right).Draw();
+            new UIResText(Text, new PointF((int)res.Width - safe.X - 10, (int)res.Height - safe.Y - (42 + (4 * interval))), 0.5f, Colors.White, Font.ChaletLondon, Alignment.Right).Draw();
         }
     }
 
@@ -61,14 +61,14 @@ namespace NativeUI
 
         public BarTimerBar(string label) : base(label)
         {
-            BackgroundColor = UnknownColors.DarkRed;
-            ForegroundColor = UnknownColors.Red;
+            BackgroundColor = Colors.DarkRed;
+            ForegroundColor = Colors.Red;
         }
 
         public override void Draw(int interval)
         {
-            SizeF res = UIMenu.GetScreenResolutionMaintainRatio();
-            PointF safe = UIMenu.GetSafezoneBounds();
+            SizeF res = ScreenTools.ResolutionMaintainRatio;
+            PointF safe = ScreenTools.SafezoneBounds;
 
             base.Draw(interval);
 
