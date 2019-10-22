@@ -30,18 +30,31 @@ namespace NativeUI
         /// </summary>
         public int Index
         {
-            get { return _index % _items.Count; }
-            set { _index = 100000000 - (100000000 % _items.Count) + value; }
-        }
+			get { return _index % Items.Count; }
+			set { _index = 100000000 - (100000000 % Items.Count) + value; }
+		}
+
+		/// <summary>
+		/// Returns the current selected index.
+		/// </summary>
+		public List<object> Items
+		{
+			get => _items;
+			set
+			{
+				Index = 0;
+				_items = value;
+			}
+		}
 
 
-        /// <summary>
-        /// List item, with left/right arrows.
-        /// </summary>
-        /// <param name="text">Item label.</param>
-        /// <param name="items">List that contains your items.</param>
-        /// <param name="index">Index in the list. If unsure user 0.</param>
-        public UIMenuListItem(string text, List<dynamic> items, int index)
+		/// <summary>
+		/// List item, with left/right arrows.
+		/// </summary>
+		/// <param name="text">Item label.</param>
+		/// <param name="items">List that contains your items.</param>
+		/// <param name="index">Index in the list. If unsure user 0.</param>
+		public UIMenuListItem(string text, List<dynamic> items, int index)
             : this(text, items, index, "")
         {
         }
@@ -60,7 +73,7 @@ namespace NativeUI
             _items = items;
             _arrowLeft = new Sprite("commonmenu", "arrowleft", new PointF(110, 105 + y), new SizeF(30, 30));
             _arrowRight = new Sprite("commonmenu", "arrowright", new PointF(280, 105 + y), new SizeF(30, 30));
-            _itemText = new UIResText("", new PointF(290, y + 104), 0.35f, UnknownColors.White, Font.ChaletLondon,
+            _itemText = new UIResText("", new PointF(290, y + 104), 0.35f, UnknownColors.White, CitizenFX.Core.UI.Font.ChaletLondon,
                 UIResText.Alignment.Left)
             { TextAlignment = UIResText.Alignment.Right };
             Index = index;
