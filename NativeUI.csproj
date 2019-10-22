@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\CitizenFX.Core.Client.1.0.1641\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1641\lib\net45\CitizenFX.Core.Client.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -42,32 +42,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BigMessage.cs" />
-    <Compile Include="Elements\Sprite.cs" />
-    <Compile Include="Elements\TimerBars.cs" />
-    <Compile Include="Elements\UIResRectangle.cs" />
-    <Compile Include="Elements\UIResText.cs" />
-    <Compile Include="Items\UIMenuSliderItem.cs" />
-    <Compile Include="UnknownColors.cs" />
-    <Compile Include="InstructionalButton.cs" />
-    <Compile Include="Items\IListItem.cs" />
-    <Compile Include="Items\UIMenuCheckboxItem.cs" />
-    <Compile Include="Items\UIMenuColoredItem.cs" />
-    <Compile Include="Items\UIMenuDynamicListItem.cs" />
-    <Compile Include="Items\UIMenuItem.cs" />
-    <Compile Include="Items\UIMenuListItem.cs" />
-    <Compile Include="MenuPool.cs" />
-    <Compile Include="PauseMenu\TabItem.cs" />
-    <Compile Include="PauseMenu\TabItemSimpleList.cs" />
-    <Compile Include="PauseMenu\TabMissionSelectItem.cs" />
-    <Compile Include="PauseMenu\TabInteractiveListItem.cs" />
-    <Compile Include="PauseMenu\TabSubmenuItem.cs" />
-    <Compile Include="PauseMenu\TabTextItem.cs" />
-    <Compile Include="PauseMenu\TabView.cs" />
-    <Compile Include="PointExtensions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringMeasurer.cs" />
-    <Compile Include="UIMenu.cs" />
+    <Compile Include="NativeUI\BigMessage.cs" />
+    <Compile Include="NativeUI\Elements\Sprite.cs" />
+    <Compile Include="NativeUI\Elements\TimerBars.cs" />
+    <Compile Include="NativeUI\Elements\UIResRectangle.cs" />
+    <Compile Include="NativeUI\Elements\UIResText.cs" />
+    <Compile Include="NativeUI\Items\UIMenuSliderItem.cs" />
+    <Compile Include="NativeUI\UnknownColors.cs" />
+    <Compile Include="NativeUI\InstructionalButton.cs" />
+    <Compile Include="NativeUI\Items\IListItem.cs" />
+    <Compile Include="NativeUI\Items\UIMenuCheckboxItem.cs" />
+    <Compile Include="NativeUI\Items\UIMenuColoredItem.cs" />
+    <Compile Include="NativeUI\Items\UIMenuDynamicListItem.cs" />
+    <Compile Include="NativeUI\Items\UIMenuItem.cs" />
+    <Compile Include="NativeUI\Items\UIMenuListItem.cs" />
+    <Compile Include="NativeUI\MenuPool.cs" />
+    <Compile Include="NativeUI\PauseMenu\TabItem.cs" />
+    <Compile Include="NativeUI\PauseMenu\TabItemSimpleList.cs" />
+    <Compile Include="NativeUI\PauseMenu\TabMissionSelectItem.cs" />
+    <Compile Include="NativeUI\PauseMenu\TabInteractiveListItem.cs" />
+    <Compile Include="NativeUI\PauseMenu\TabSubmenuItem.cs" />
+    <Compile Include="NativeUI\PauseMenu\TabTextItem.cs" />
+    <Compile Include="NativeUI\PauseMenu\TabView.cs" />
+    <Compile Include="NativeUI\PointExtensions.cs" />
+    <Compile Include="NativeUI\Properties\AssemblyInfo.cs" />
+    <Compile Include="NativeUI\StringMeasurer.cs" />
+    <Compile Include="NativeUI\UIMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
