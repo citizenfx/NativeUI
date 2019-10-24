@@ -1021,19 +1021,19 @@ namespace NativeUI
 			UpdateScaleform();
 
 			_mainMenu = new Container(new PointF(0, 0), new SizeF(700, 500), Color.FromArgb(0, 0, 0, 0));
-			BannerSprite = new Sprite(spriteLibrary, spriteName, new PointF(0 + Offset.X, 0 + Offset.Y), new SizeF(431, 107));
-			_mainMenu.Items.Add(Title = new UIResText(title, new PointF(215 + Offset.X, 20 + Offset.Y), 1.15f, Colors.White, Font.HouseScript, Alignment.Center));
+			BannerSprite = new Sprite(spriteLibrary, spriteName, new PointF(0 + Offset.X, 0 + Offset.Y), new SizeF(431, 100));
+			_mainMenu.Items.Add(Title = new UIResText(title, new PointF(215 + Offset.X, 13 + Offset.Y), 1.15f, Colors.White, Font.HouseScript, Alignment.Center));
 			if (!String.IsNullOrWhiteSpace(subtitle))
 			{
-				_mainMenu.Items.Add(new UIResRectangle(new PointF(0 + offset.X, 107 + Offset.Y), new SizeF(431, 37), Colors.Black));
+				_mainMenu.Items.Add(new UIResRectangle(new PointF(0 + offset.X, 100 + Offset.Y), new SizeF(431, 37), Colors.Black));
 				_mainMenu.Items.Add(Subtitle = new UIResText(subtitle, new PointF(8 + Offset.X, 110 + Offset.Y), 0.35f, Colors.WhiteSmoke, 0, Alignment.Left));
 
 				if (subtitle.StartsWith("~"))
 				{
 					CounterPretext = subtitle.Substring(0, 3);
 				}
-				_counterText = new UIResText("", new PointF(425 + Offset.X, 110 + Offset.Y), 0.35f, Colors.WhiteSmoke, 0, Alignment.Right);
-				_extraYOffset = 37;
+				_counterText = new UIResText("", new PointF(425 + Offset.X, 103 + Offset.Y), 0.35f, Colors.WhiteSmoke, 0, Alignment.Right);
+				_extraYOffset = 30;
 			}
 
 			_upAndDownSprite = new Sprite("commonmenu", "shop_arrows_upanddown", new PointF(190 + Offset.X, 147 + 37 * (MaxItemsOnScreen + 1) + Offset.Y - 37 + _extraYOffset), new SizeF(50, 50));
@@ -1111,7 +1111,7 @@ namespace NativeUI
 		public void SetMenuWidthOffset(int widthOffset)
 		{
 			WidthOffset = widthOffset;
-			BannerSprite .Size = new SizeF(431 + WidthOffset, 107);
+			BannerSprite .Size = new SizeF(431 + WidthOffset, 100);
 			_mainMenu.Items[0].Position = new PointF((WidthOffset + Offset.X + 431) / 2, 20 + Offset.Y); // Title
 			_counterText.Position = new PointF(425 + Offset.X + widthOffset, 110 + Offset.Y);
 			if (_mainMenu.Items.Count >= 1)
@@ -1121,7 +1121,7 @@ namespace NativeUI
 			}
 			if (BannerRectangle != null)
 			{
-				BannerRectangle.Size = new SizeF(431 + WidthOffset, 107);
+				BannerRectangle.Size = new SizeF(431 + WidthOffset, 100);
 			}
 		}
 
@@ -1141,7 +1141,7 @@ namespace NativeUI
 		public void SetBannerType(Sprite spriteBanner)
 		{
 			BannerSprite  = spriteBanner;
-			BannerSprite .Size = new SizeF(431 + WidthOffset, 107);
+			BannerSprite .Size = new SizeF(431 + WidthOffset, 100);
 			BannerSprite .Position = new PointF(Offset.X, Offset.Y);
 		}
 
@@ -1154,7 +1154,7 @@ namespace NativeUI
 			BannerSprite  = null;
 			BannerRectangle = rectangle;
 			BannerRectangle.Position = new PointF(Offset.X, Offset.Y);
-			BannerRectangle.Size = new SizeF(431 + WidthOffset, 107);
+			BannerRectangle.Size = new SizeF(431 + WidthOffset, 100);
 		}
 
 		/// <summary>
@@ -1312,7 +1312,7 @@ namespace NativeUI
 		{
 			float WindowHeight = CalculateWindowHeight();
 
-			DrawWidth = new SizeF(431 + WidthOffset, 107);
+			DrawWidth = new SizeF(431 + WidthOffset, 100);
 
 			Safe = ScreenTools.SafezoneBounds;
 
