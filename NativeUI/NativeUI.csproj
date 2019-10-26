@@ -60,6 +60,7 @@
     <Compile Include="Items\UIMenuDynamicListItem.cs" />
     <Compile Include="Items\UIMenuItem.cs" />
     <Compile Include="Items\UIMenuListItem.cs" />
+    <Compile Include="Items\UIMenuSliderProgressItem.cs" />
     <Compile Include="MenuPool.cs" />
     <Compile Include="Panels\UIMenuColorPanel.cs" />
     <Compile Include="Panels\UIMenuGridPanel.cs" />

@@ -135,10 +135,8 @@ namespace NativeUI
 			_rectangleDivider.Position = new PointF(323 + Offset.X, y + 153 + Offset.Y);
 			_arrowLeft.Position = new PointF(235 + Offset.X + Parent.WidthOffset, 155 + y + Offset.Y);
 			_arrowRight.Position = new PointF(400 + Offset.X + Parent.WidthOffset, 155 + y + Offset.Y);
-
 			base.Position(y);
 		}
-
 
 		/// <summary>
 		/// Draw item.

@@ -106,8 +106,9 @@ namespace NativeUI
         /// </summary>
         public virtual async Task Draw()
         {
-            _rectangle.Size = new SizeF(431 + Parent.WidthOffset, 38);
-            _selectedSprite.Size = new SizeF(431 + Parent.WidthOffset, 38);
+			// Removed because of Progress Item height calculations
+            //_rectangle.Size = new SizeF(431 + Parent.WidthOffset, 38);
+            //_selectedSprite.Size = new SizeF(431 + Parent.WidthOffset, 38);
 
             if (Hovered && !Selected)
             {
