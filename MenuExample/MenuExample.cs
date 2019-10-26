@@ -103,6 +103,7 @@ public class MenuExample : BaseScript
 				Screen.ShowSubtitle(String.Format(output, dish));
 			}
 		};
+
 		menu.OnIndexChange += (sender, index) =>
 		{
 			if (sender.MenuItems[index] == newitem)
@@ -111,6 +112,12 @@ public class MenuExample : BaseScript
 
 		var BlankItem = new UIMenuSeparatorItem();
 		menu.AddItem(BlankItem);
+
+		var SliderProgress = new UIMenuSliderProgressItem("Slider Progress Item", 10, 0);
+		menu.AddItem(SliderProgress);
+
+		var Progress = new UIMenuProgressItem("Progress Item", "descriptiom", 10 , 0, true);
+		menu.AddItem(Progress);
 
 		var listPanelItem1 = new UIMenuListItem("Change Color", new List<object> { "Example", "example2" }, 0);
 		var ColorPanel = new UIMenuColorPanel("Color Panel Example", UIMenuColorPanel.ColorPanelType.Hair);

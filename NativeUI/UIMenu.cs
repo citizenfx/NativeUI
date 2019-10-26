@@ -819,9 +819,15 @@ namespace NativeUI
 
 	public delegate void ItemSliderEvent(UIMenuSliderItem sender, int newIndex);
 
+	public delegate void ItemSliderProgressEvent(UIMenuSliderProgressItem sender, int newIndex);
+
 	public delegate void OnProgressChanged(UIMenu menu, UIMenuProgressItem item, int newIndex);
 
 	public delegate void OnProgressSelected(UIMenu menu, UIMenuProgressItem item, int newIndex);
+
+	public delegate void ProgressSliderChangedEvent(UIMenu menu, UIMenuSliderProgressItem item, int newIndex);
+
+	
 
 	#endregion
 
@@ -930,6 +936,11 @@ namespace NativeUI
 		/// Called when user presses left or right, changing a slider position.
 		/// </summary>
 		public event SliderChangedEvent OnSliderChange;
+
+		/// <summary>
+		/// Called when user presses left or right, changing a progress slider position.
+		/// </summary>
+		public event ProgressSliderChangedEvent OnProgressSliderChange;
 
 		/// <summary>
 		/// Called When user changes progress in a ProgressItem.
@@ -1452,7 +1463,7 @@ namespace NativeUI
 				return;
 			}
 
-			if (!(MenuItems[CurrentSelection] is UIMenuListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderItem) && !(MenuItems[CurrentSelection] is UIMenuDynamicListItem)) return;
+			if (!(MenuItems[CurrentSelection] is UIMenuListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderItem) && !(MenuItems[CurrentSelection] is UIMenuDynamicListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderProgressItem) && !(MenuItems[CurrentSelection] is UIMenuProgressItem)) return;
 
 
 			if (MenuItems[CurrentSelection] is UIMenuListItem)
@@ -1473,9 +1484,23 @@ namespace NativeUI
 			else if (MenuItems[CurrentSelection] is UIMenuSliderItem)
 			{
 				UIMenuSliderItem it = (UIMenuSliderItem)MenuItems[CurrentSelection];
-				it.Value -= it.Multiplier--;
+				it.Value -= it.Multiplier;
 				Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
 				SliderChange(it, it.Value);
+			}
+			else if (MenuItems[CurrentSelection] is UIMenuSliderProgressItem)
+			{
+				UIMenuSliderProgressItem it = (UIMenuSliderProgressItem)MenuItems[CurrentSelection];
+				it.Value--;
+				Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+				SliderProgressChange(it, it.Value);
+			}
+			else if (MenuItems[CurrentSelection] is UIMenuProgressItem)
+			{
+				UIMenuProgressItem it = (UIMenuProgressItem)MenuItems[CurrentSelection];
+				it.Index--;
+				Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+				ProgressChange(it, it.Index);
 			}
 		}
 
@@ -1491,7 +1516,7 @@ namespace NativeUI
 				return;
 			}
 
-			if (!(MenuItems[CurrentSelection] is UIMenuListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderItem) && !(MenuItems[CurrentSelection] is UIMenuDynamicListItem)) return;
+			if (!(MenuItems[CurrentSelection] is UIMenuListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderItem) && !(MenuItems[CurrentSelection] is UIMenuDynamicListItem) && !(MenuItems[CurrentSelection] is UIMenuSliderProgressItem) && !(MenuItems[CurrentSelection] is UIMenuProgressItem)) return;
 
 			if (MenuItems[CurrentSelection] is UIMenuListItem)
 			{
@@ -1515,6 +1540,20 @@ namespace NativeUI
 				it.Value += it.Multiplier;
 				Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
 				SliderChange(it, it.Value);
+			}
+			else if (MenuItems[CurrentSelection] is UIMenuSliderProgressItem)
+			{
+				UIMenuSliderProgressItem it = (UIMenuSliderProgressItem)MenuItems[CurrentSelection];
+				it.Value ++;
+				Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+				SliderProgressChange(it, it.Value);
+			}
+			else if (MenuItems[CurrentSelection] is UIMenuProgressItem)
+			{
+				UIMenuProgressItem it = (UIMenuProgressItem)MenuItems[CurrentSelection];
+				it.Index++;
+				Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+				ProgressChange(it, it.Index);
 			}
 		}
 
@@ -2289,6 +2328,11 @@ namespace NativeUI
 		protected virtual void SliderChange(UIMenuSliderItem sender, int newindex)
 		{
 			OnSliderChange?.Invoke(this, sender, newindex);
+		}
+
+		protected virtual void SliderProgressChange(UIMenuSliderProgressItem sender, int newindex)
+		{
+			OnProgressSliderChange?.Invoke(this, sender, newindex);
 		}
 
 		protected virtual void ItemSelect(UIMenuItem selecteditem, int index)
