@@ -20,7 +20,7 @@ public class MenuExample : BaseScript
 			if (item == newitem)
 			{
 				ketchup = checked_;
-				CitizenFX.Core.UI.Screen.ShowNotification("~r~Ketchup status: ~b~" + ketchup);
+				Screen.ShowNotification("~r~Ketchup status: ~b~" + ketchup);
 			}
 		};
 	}
@@ -42,7 +42,7 @@ public class MenuExample : BaseScript
 			if (item == newitem)
 			{
 				dish = item.Items[index].ToString();
-				CitizenFX.Core.UI.Screen.ShowNotification("Preparing ~b~" + dish + "~w~...");
+				Screen.ShowNotification("Preparing ~b~" + dish + "~w~...");
 			}
 
 		};
@@ -84,7 +84,7 @@ public class MenuExample : BaseScript
 		{
 			if (_item == newItem)
 			{
-				CitizenFX.Core.UI.Screen.ShowNotification("Wow the slider changed! Who do i look like??");
+				Screen.ShowNotification("Wow the slider changed! Who do i look like??");
 			}
 		};
 	}
@@ -100,7 +100,7 @@ public class MenuExample : BaseScript
 			if (item == newitem)
 			{
 				string output = ketchup ? "You have ordered ~b~{0}~w~ ~r~with~w~ ketchup." : "You have ordered ~b~{0}~w~ ~r~without~w~ ketchup.";
-				CitizenFX.Core.UI.Screen.ShowSubtitle(String.Format(output, dish));
+				Screen.ShowSubtitle(String.Format(output, dish));
 			}
 		};
 		menu.OnIndexChange += (sender, index) =>
@@ -151,15 +151,15 @@ public class MenuExample : BaseScript
 		{
 			if (item == listPanelItem1)
 			{
-				CitizenFX.Core.UI.Screen.ShowNotification("Selected color " + ((item.Panels[0] as UIMenuColorPanel).CurrentSelection + 1) + "...");
+				Screen.ShowNotification("Selected color " + ((item.Panels[0] as UIMenuColorPanel).CurrentSelection + 1) + "...");
 			}
 			else if (item == listPanelItem2)
 			{
-				CitizenFX.Core.UI.Screen.ShowSubtitle("Percentage = " + (item.Panels[0] as UIMenuPercentagePanel).Percentage + "...");
+				Screen.ShowSubtitle("Percentage = " + (item.Panels[0] as UIMenuPercentagePanel).Percentage + "...");
 			}
 			else if (item == listPanelItem3)
 			{
-				CitizenFX.Core.UI.Screen.ShowSubtitle("GridPosition = " + (item.Panels[0] as UIMenuGridPanel).CirclePosition + "...");
+				Screen.ShowSubtitle("GridPosition = " + (item.Panels[0] as UIMenuGridPanel).CirclePosition + "...");
 			}
 		};
 	}
