@@ -34,9 +34,4 @@ namespace NativeUI
 		public UIMenuListItem ParentItem { get; set; }
 
 	}
-
-	public class Data
-	{
-
-	}
 }

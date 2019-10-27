@@ -1312,7 +1312,7 @@ namespace NativeUI
 		/// </summary>
 		private float CalculatePanelsPosition(bool hasDescription)
 		{
-			float Height = CalculateWindowHeight() + 80 + _mainMenu.Position.Y;
+			float Height = CalculateWindowHeight() + 40 + _mainMenu.Position.Y;
 			if (hasDescription)
 				Height += _descriptionRectangle.Size.Height + 5;
 			return CalculateItemHeight() + Height;
@@ -1322,32 +1322,20 @@ namespace NativeUI
 		private void DrawCalculations()
 		{
 			float WindowHeight = CalculateWindowHeight();
-
 			DrawWidth = new SizeF(431 + WidthOffset, 100);
-
 			Safe = ScreenTools.SafezoneBounds;
-
 			BackgroundSize = Size > MaxItemsOnScreen + 1 ? new SizeF(431 + WidthOffset, 38 * (MaxItemsOnScreen + 1 + WindowHeight)) : new SizeF(431 + WidthOffset, 38 * Size + WindowHeight);
-
 			_extraRectangleUp.Size = new SizeF(431 + WidthOffset, 18 + WindowHeight);
-
 			_extraRectangleDown.Size = new SizeF(431 + WidthOffset, 18 + WindowHeight);
-
 			_upAndDownSprite.Position = new PointF(190 + Offset.X + (WidthOffset > 0 ? (WidthOffset / 2) : WidthOffset), 147 + 37 * (MaxItemsOnScreen + 1) + Offset.Y - 37 + _extraYOffset + WindowHeight);
-
 			ReDraw = false;
-
 			if (MenuItems.Count != 0 && !String.IsNullOrWhiteSpace(MenuItems[_activeItem % (MenuItems.Count)].Description))
 			{
 				RecalculateDescriptionPosition();
-
 				string descCaption = MenuItems[_activeItem % (MenuItems.Count)].Description;
-
 				_descriptionText.Caption = descCaption;
 				_descriptionText.Wrap = 400;
-
 				int numLines = ScreenTools.GetLineCount(descCaption, _descriptionText.Position, _descriptionText.Font, _descriptionText.Scale, _descriptionText.Position.X + 400);
-
 				_descriptionRectangle.Size = new SizeF(431 + WidthOffset, (numLines * 25) + 15);
 			}
 		}
@@ -1957,7 +1945,6 @@ namespace NativeUI
 				{
 					if (index > 0)
 						WindowOffset += Windows[index].Background.Size.Height;
-
 					Windows[index].Position(WindowOffset + _extraYOffset + 37);
 					Windows[index].Draw();
 				}
@@ -1977,8 +1964,6 @@ namespace NativeUI
 					}
 				}
 			}
-
-
 			if (ScaleWithSafezone)
 				API.ResetScriptGfxAlign(); // Safezone end
 		}

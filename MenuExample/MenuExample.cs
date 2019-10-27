@@ -121,7 +121,7 @@ public class MenuExample : BaseScript
 
 		var listPanelItem1 = new UIMenuListItem("Change Color", new List<object> { "Example", "example2" }, 0);
 		var ColorPanel = new UIMenuColorPanel("Color Panel Example", UIMenuColorPanel.ColorPanelType.Hair);
-		// you can choose from hair palette or makeup palette
+		// you can choose between hair palette or makeup palette
 		menu.AddItem(listPanelItem1);
 		listPanelItem1.AddPanel(ColorPanel);
 
@@ -159,6 +159,8 @@ public class MenuExample : BaseScript
 			if (item == listPanelItem1)
 			{
 				Screen.ShowNotification("Selected color " + ((item.Panels[0] as UIMenuColorPanel).CurrentSelection + 1) + "...");
+				item.Description = "Selected color " + ((item.Panels[0] as UIMenuColorPanel).CurrentSelection + 1) + "...";
+				item.Parent.UpdateDescription(); // this is neat.. this will update the description of the item without refresh index.. try it by changing color
 			}
 			else if (item == listPanelItem2)
 			{
