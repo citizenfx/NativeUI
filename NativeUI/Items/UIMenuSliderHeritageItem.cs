@@ -27,17 +27,9 @@ namespace NativeUI
 			await base.Draw();
 			_arrowLeft.Color = Enabled ? Selected ? Color.FromArgb(255, 102, 178) : Colors.WhiteSmoke : Color.FromArgb(163, 159, 148);
 			_arrowRight.Color = Enabled ? Selected ? Color.FromArgb(51,51,255) : Colors.WhiteSmoke : Color.FromArgb(163, 159, 148);
-			if (Selected)
-			{
-				_arrowLeft.Draw();
-				_arrowRight.Draw();
-			}
-			else
-			{
-
-			}
+			_arrowLeft.Draw();
+			_arrowRight.Draw();
 			await Task.FromResult(0);
-
 		}
 	}
 }
