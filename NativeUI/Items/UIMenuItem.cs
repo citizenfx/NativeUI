@@ -140,12 +140,15 @@ namespace NativeUI
                 _badgeRight.TextureName = BadgeToSpriteName(RightBadge, Selected);
                 _badgeRight.Color = BadgeToColor(RightBadge, Selected);
                 _badgeRight.Draw();
-            }
+			}
 
-            if (!String.IsNullOrWhiteSpace(RightLabel))
+			if (!String.IsNullOrWhiteSpace(RightLabel))
             {
-                _labelText.Position = new PointF(420 + Offset.X + Parent.WidthOffset, _labelText.Position.Y);
-                _labelText.Caption = RightLabel;
+				if (RightBadge == BadgeStyle.None)
+	                _labelText.Position = new PointF(420 + Offset.X + Parent.WidthOffset, _labelText.Position.Y);
+				else
+					_labelText.Position = new PointF(390 + Offset.X + Parent.WidthOffset, _labelText.Position.Y);
+				_labelText.Caption = RightLabel;
                 _labelText.Color = _text.Color = Enabled ? (Selected ? Colors.Black : Colors.WhiteSmoke) : _disabledColor; // No alloc anymore there
                 _labelText.Draw();
             }
