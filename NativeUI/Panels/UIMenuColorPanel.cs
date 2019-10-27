@@ -106,18 +106,17 @@ namespace NativeUI
 
 		internal override void Position(float y)
 		{
-			float Y = y;
 			float ParentOffsetX = ParentItem.Offset.X; float ParentOffsetWidth = ParentItem.Parent.WidthOffset;
-			Background.Position = new PointF(ParentOffsetX, Y);
+			Background.Position = new PointF(ParentOffsetX, y);
 			for (int Index = 0; Index < Bar.Count; Index++)
-				Bar[Index].Position = new PointF(15f + (44.5f * Index) + ParentOffsetX + (ParentOffsetWidth / 2), 55f + Y);
-			SelectedRectangle.Position = new PointF(15f + (44.5f * (CurrentSelection - Data.Pagination.Min)) + ParentOffsetX + (ParentOffsetWidth / 2), 47f + Y);
+				Bar[Index].Position = new PointF(15f + (44.5f * Index) + ParentOffsetX + (ParentOffsetWidth / 2), 55f + y);
+			SelectedRectangle.Position = new PointF(15f + (44.5f * (CurrentSelection - Data.Pagination.Min)) + ParentOffsetX + (ParentOffsetWidth / 2), 47f + y);
 			if (EnableArrow)
 			{
-				LeftArrow.Position = new PointF(7.5f + ParentOffsetX + (ParentOffsetWidth / 2), 15f + Y);
-				RightArrow.Position = new PointF(393.5f + ParentOffsetX + (ParentOffsetWidth / 2), 15f + Y);
+				LeftArrow.Position = new PointF(7.5f + ParentOffsetX + (ParentOffsetWidth / 2), 15f + y);
+				RightArrow.Position = new PointF(393.5f + ParentOffsetX + (ParentOffsetWidth / 2), 15f + y);
 			}
-			Text.Position = new PointF(215.5f + ParentOffsetX + (ParentOffsetWidth / 2), 15f + Y);
+			Text.Position = new PointF(215.5f + ParentOffsetX + (ParentOffsetWidth / 2), 15f + y);
 		}
 
 		private void UpdateSelection(bool update)

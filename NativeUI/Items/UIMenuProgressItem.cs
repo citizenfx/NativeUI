@@ -91,7 +91,6 @@ namespace NativeUI
 			_bar.Position = new PointF(11.75f + Offset.X, 172.5f + y + Offset.Y);
 		}
 
-
 		public void CalculateProgress(float CursorX)
 		{
 			var Progress = CursorX - _bar.Position.X;
@@ -117,6 +116,7 @@ namespace NativeUI
 							CalculateProgress(CursorX);
 							Parent.ProgressChange(this, _index);
 							ProgressChanged(Parent, this, _index);
+
 						}
 						API.StopSound(Audio.Id);
 						API.ReleaseSoundId(Audio.Id);
