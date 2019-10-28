@@ -110,6 +110,9 @@ public class MenuExample : BaseScript
 				newitem.SetLeftBadge(UIMenuItem.BadgeStyle.None);
 		};
 
+		var colorItem = new UIMenuItem("UIMenuItem with Colors", "~b~Look!!~r~I can be colored ~y~too!!~w~", Color.FromArgb(150, 127, 66, 42), Color.FromArgb(170, 174, 219, 242));
+		menu.AddItem(colorItem);
+
 		var BlankItem = new UIMenuSeparatorItem();
 		menu.AddItem(BlankItem);
 

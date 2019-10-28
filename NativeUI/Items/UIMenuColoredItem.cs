@@ -1,9 +1,11 @@
 ﻿using CitizenFX.Core.UI;
+using System;
 using System.Drawing;
 using System.Threading.Tasks;
 
 namespace NativeUI
 {
+	[Obsolete("UIMenuColoredItem is deprecated: use UIMenuItem(text, description, mainColor, hilightColor) instead", true)]
     public class UIMenuColoredItem : UIMenuItem
     {
         public Color MainColor { get; set; }
@@ -12,7 +14,7 @@ namespace NativeUI
         public Color TextColor { get; set; }
         public Color HighlightedTextColor { get; set; }
 
-        public UIMenuColoredItem(string label, Color color, Color highlightColor) : base(label)
+		public UIMenuColoredItem(string label, Color color, Color highlightColor) : base(label, "")
         {
             MainColor = color;
             HighlightColor = highlightColor;
