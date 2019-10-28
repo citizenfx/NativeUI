@@ -26,7 +26,7 @@ namespace NativeUI
 		/// </summary>
 		/// <param name="text">Item label.</param>
 		/// <param name="check">Boolean value whether the checkbox is checked.</param>
-		public UIMenuCheckboxItem(string text, UIMenuCheckboxStyle style, bool check) : this(text, style, check, "")
+		public UIMenuCheckboxItem(string text, bool check) : this(text, check, "")
         {
         }
 
@@ -36,7 +36,7 @@ namespace NativeUI
         /// <param name="text">Item label.</param>
         /// <param name="check">Boolean value whether the checkbox is checked.</param>
         /// <param name="description">Description for this item.</param>
-        public UIMenuCheckboxItem(string text, UIMenuCheckboxStyle style, bool check, string description) : this(text, style, check, description, Color.Transparent, Color.FromArgb(255, 255, 255, 255))
+        public UIMenuCheckboxItem(string text, bool check, string description) : this(text, UIMenuCheckboxStyle.Tick, check, description, Color.Transparent, Color.FromArgb(255, 255, 255, 255))
         {
         }
 
@@ -44,6 +44,18 @@ namespace NativeUI
 		/// Checkbox item with a toggleable checkbox.
 		/// </summary>
 		/// <param name="text">Item label.</param>
+		/// <param name="style">CheckBox style (Tick or Cross).</param>
+		/// <param name="check">Boolean value whether the checkbox is checked.</param>
+		/// <param name="description">Description for this item.</param>
+		public UIMenuCheckboxItem(string text, UIMenuCheckboxStyle style, bool check, string description) : this(text, style, check, description, Color.Transparent, Color.FromArgb(255, 255, 255, 255))
+		{
+		}
+
+		/// <summary>
+		/// Checkbox item with a toggleable checkbox.
+		/// </summary>
+		/// <param name="text">Item label.</param>
+		/// <param name="style">CheckBox style (Tick or Cross).</param>
 		/// <param name="check">Boolean value whether the checkbox is checked.</param>
 		/// <param name="description">Description for this item.</param>
 		/// <param name="mainColor">Main item color.</param>
