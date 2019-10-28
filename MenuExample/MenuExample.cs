@@ -110,11 +110,24 @@ public class MenuExample : BaseScript
 				newitem.SetLeftBadge(UIMenuItem.BadgeStyle.None);
 		};
 
-		var colorItem = new UIMenuItem("UIMenuItem with Colors", "~b~Look!!~r~I can be colored ~y~too!!~w~", Color.FromArgb(150, 127, 66, 42), Color.FromArgb(170, 174, 219, 242));
+		var colorItem = new UIMenuItem("UIMenuItem with Colors", "~b~Look!!~r~I can be colored ~y~too!!~w~", Color.FromArgb(150, 185, 230, 185), Color.FromArgb(170, 174, 219, 242));
 		menu.AddItem(colorItem);
+
+		var foods = new List<dynamic>
+		{
+			"Banana",
+			"Apple",
+			"Pizza",
+			"Quartilicious",
+			0xF00D, // Dynamic!
+        };
 
 		var BlankItem = new UIMenuSeparatorItem();
 		menu.AddItem(BlankItem);
+
+		var colorListItem = new UIMenuListItem("Colored ListItem.. Really?", foods, 0, "~b~Look!!~r~I can be colored ~y~too!!~w~", Color.FromArgb(150, 185, 230, 185), Color.FromArgb(170, 174, 219, 242));
+		menu.AddItem(colorListItem);
+
 
 		var SliderProgress = new UIMenuSliderProgressItem("Slider Progress Item", 10, 0);
 		menu.AddItem(SliderProgress);
