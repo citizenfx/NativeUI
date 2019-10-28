@@ -13,7 +13,7 @@ public class MenuExample : BaseScript
 
 	public void AddMenuKetchup(UIMenu menu)
 	{
-		var newitem = new UIMenuCheckboxItem("Add ketchup?", ketchup, "Do you wish to add ketchup?");
+		var newitem = new UIMenuCheckboxItem("Add ketchup?", UIMenuCheckboxStyle.Cross, ketchup, "Do you wish to add ketchup?");
 		menu.AddItem(newitem);
 		menu.OnCheckboxChange += (sender, item, checked_) =>
 		{

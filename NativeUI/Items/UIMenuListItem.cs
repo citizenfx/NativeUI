@@ -75,8 +75,6 @@ namespace NativeUI
 		public UIMenuListItem(string text, List<dynamic> items, int index, string description, Color mainColor, Color higlightColor) : base(text, description, mainColor, higlightColor)
 		{
 			const int y = 0;
-			MainColor = mainColor;
-			HighlightColor = higlightColor;
 			_items = items;
 			_arrowLeft = new Sprite("commonmenu", "arrowleft", new PointF(110, 105 + y), new SizeF(30, 30));
 			_arrowRight = new Sprite("commonmenu", "arrowright", new PointF(280, 105 + y), new SizeF(30, 30));
