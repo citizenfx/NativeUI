@@ -19,7 +19,14 @@ namespace NativeUI
 
         protected UIResText _labelText;
 
-        private readonly Color _disabledColor = Color.FromArgb(163, 159, 148); // Why allocating memory for same color every time?
+		public Color MainColor { get; set; }
+		public Color HighlightColor { get; set; }
+
+		public Color TextColor { get; set; }
+		public Color HighlightedTextColor { get; set; }
+
+		private readonly Color _defaultColor = Color.FromArgb(20, 255, 255, 255);
+		private readonly Color _disabledColor = Color.FromArgb(163, 159, 148); // Why allocating memory for same color every time?
 
         /// <summary>
         /// Called when user selects the current item.
@@ -27,39 +34,52 @@ namespace NativeUI
         public event ItemActivatedEvent Activated;
 
 
-        /// <summary>
-        /// Basic menu button.
-        /// </summary>
-        /// <param name="text">Button label.</param>
-        public UIMenuItem(string text) : this(text, "")
-        {
-        }
+		/// <summary>
+		/// Basic menu button.
+		/// </summary>
+		/// <param name="text">Button label.</param>
+		public UIMenuItem(string text) : this(text, "", Color.Transparent, Color.FromArgb(255, 255, 255, 255)){}
 
-        /// <summary>
-        /// Basic menu button.
-        /// </summary>
-        /// <param name="text">Button label.</param>
-        /// <param name="description">Description.</param>
-        public UIMenuItem(string text, string description)
-        {
-            Enabled = true;
+		/// <summary>
+		/// Basic menu button with description.
+		/// </summary>
+		/// <param name="text">Button label.</param>
+		/// <param name="description">Description.</param>
+		public UIMenuItem(string text, string description) : this(text, description, Color.Transparent, Color.FromArgb(255, 255, 255, 255)){}
 
-            _rectangle = new UIResRectangle(new PointF(0, 0), new SizeF(431, 38), Color.FromArgb(20, 255, 255, 255)); // Color.FromArgb(150, 0, 0, 0)
-            _text = new UIResText(text, new PointF(8, 0), 0.33f, Colors.WhiteSmoke, CitizenFX.Core.UI.Font.ChaletLondon, Alignment.Left);
-            Description = description;
-            _selectedSprite = new Sprite("commonmenu", "gradient_nav", new PointF(0, 0), new SizeF(431, 38));
+		/// <summary>
+		/// Basic menu button with description and colors.
+		/// </summary>
+		/// <param name="text">Button label.</param>
+		/// <param name="description">Button label.</param>
+		/// <param name="description">Button label.</param>
+		/// <param name="description">Button label.</param>
+		public UIMenuItem(string text, string description, Color color, Color highlightColor)
+		{
+			Enabled = true;
 
-            _badgeLeft = new Sprite("commonmenu", "", new PointF(0, 0), new SizeF(40, 40));
-            _badgeRight = new Sprite("commonmenu", "", new PointF(0, 0), new SizeF(40, 40));
+			MainColor = color;
+			HighlightColor = highlightColor;
 
-            _labelText = new UIResText("", new PointF(0, 0), 0.35f) { TextAlignment = Alignment.Right };
-        }
+			TextColor = Colors.White;
+			HighlightedTextColor = Colors.Black;
+
+			_rectangle = new UIResRectangle(new Point(0, 0), new Size(431, 38), _defaultColor); // Color.FromArgb(150, 0, 0, 0)
+			_text = new UIResText(text, new Point(8, 0), 0.33f, Colors.WhiteSmoke, CitizenFX.Core.UI.Font.ChaletLondon, Alignment.Left);
+			Description = description;
+			_selectedSprite = new Sprite("commonmenu", "gradient_nav", new Point(0, 0), new Size(431, 38));
+
+			_badgeLeft = new Sprite("commonmenu", "", new Point(0, 0), new Size(40, 40));
+			_badgeRight = new Sprite("commonmenu", "", new Point(0, 0), new Size(40, 40));
+
+			_labelText = new UIResText("", new Point(0, 0), 0.35f) { TextAlignment = Alignment.Right };
+		}
 
 
-        /// <summary>
-        /// Whether this item is currently selected.
-        /// </summary>
-        public virtual bool Selected { get; set; }
+		/// <summary>
+		/// Whether this item is currently selected.
+		/// </summary>
+		public virtual bool Selected { get; set; }
 
 
         /// <summary>
@@ -111,14 +131,20 @@ namespace NativeUI
             //_selectedSprite.Size = new SizeF(431 + Parent.WidthOffset, 38);
 
             if (Hovered && !Selected)
-            {
-                //_rectangle.Color = Color.FromArgb(20, 255, 255, 255); // Why setting color every time? (I set it in ctor)
                 _rectangle.Draw();
-            }
-            if (Selected)
-                _selectedSprite.Draw();
+			if (Selected)
+			{
+				_selectedSprite.Color = HighlightColor;
+				_selectedSprite.Draw();
+			}
+			else
+			{
 
-            _text.Color = Enabled ? (Selected ? Colors.Black : Colors.WhiteSmoke) : _disabledColor; // No alloc anymore there
+				_selectedSprite.Color = MainColor;
+				_selectedSprite.Draw();
+			}
+
+			_text.Color = Enabled ? (Selected ? HighlightedTextColor : TextColor) : _disabledColor; // No alloc anymore there
 
             if (LeftBadge == BadgeStyle.None)
             {
@@ -152,7 +178,6 @@ namespace NativeUI
                 _labelText.Color = _text.Color = Enabled ? (Selected ? Colors.Black : Colors.WhiteSmoke) : _disabledColor; // No alloc anymore there
                 _labelText.Draw();
             }
-
             _text.Draw();
         }
 

@@ -68,24 +68,28 @@ namespace NativeUI
         /// <param name="items">List that contains your items.</param>
         /// <param name="index">Index in the list. If unsure user 0.</param>
         /// <param name="description">Description for this item.</param>
-        public UIMenuListItem(string text, List<dynamic> items, int index, string description) : base(text, description)
+        public UIMenuListItem(string text, List<dynamic> items, int index, string description) : this(text, items, index, description, Color.Transparent, Color.FromArgb(255, 255, 255, 255))
         {
-            const int y = 0;
-            _items = items;
-            _arrowLeft = new Sprite("commonmenu", "arrowleft", new PointF(110, 105 + y), new SizeF(30, 30));
-            _arrowRight = new Sprite("commonmenu", "arrowright", new PointF(280, 105 + y), new SizeF(30, 30));
-            _itemText = new UIResText("", new PointF(290, y + 104), 0.35f, Colors.White, CitizenFX.Core.UI.Font.ChaletLondon,
-                Alignment.Left)
-            { TextAlignment = Alignment.Right };
-            Index = index;
         }
 
+		public UIMenuListItem(string text, List<dynamic> items, int index, string description, Color mainColor, Color higlightColor) : base(text, description, mainColor, higlightColor)
+		{
+			const int y = 0;
+			_items = items;
+			_arrowLeft = new Sprite("commonmenu", "arrowleft", new PointF(110, 105 + y), new SizeF(30, 30));
+			_arrowRight = new Sprite("commonmenu", "arrowright", new PointF(280, 105 + y), new SizeF(30, 30));
+			_itemText = new UIResText("", new PointF(290, y + 104), 0.35f, Colors.White, CitizenFX.Core.UI.Font.ChaletLondon,
+				Alignment.Left)
+			{ TextAlignment = Alignment.Right };
+			Index = index;
+		}
 
-        /// <summary>
-        /// Change item's position.
-        /// </summary>
-        /// <param name="y">New Y position.</param>
-        public override void Position(int y)
+
+		/// <summary>
+		/// Change item's position.
+		/// </summary>
+		/// <param name="y">New Y position.</param>
+		public override void Position(int y)
         {
             _arrowLeft.Position = new PointF(300 + Offset.X + Parent.WidthOffset, 147 + y + Offset.Y);
             _arrowRight.Position = new PointF(400 + Offset.X + Parent.WidthOffset, 147 + y + Offset.Y);
