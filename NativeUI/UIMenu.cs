@@ -1037,7 +1037,7 @@ namespace NativeUI
 			if (!String.IsNullOrWhiteSpace(subtitle))
 			{
 				_mainMenu.Items.Add(new UIResRectangle(new PointF(0 + offset.X, 100 + Offset.Y), new SizeF(431, 37), Colors.Black));
-				_mainMenu.Items.Add(Subtitle = new UIResText(subtitle, new PointF(8 + Offset.X, 110 + Offset.Y), 0.35f, Colors.WhiteSmoke, 0, Alignment.Left));
+				_mainMenu.Items.Add(Subtitle = new UIResText(subtitle, new PointF(8 + Offset.X, 103 + Offset.Y), 0.35f, Colors.WhiteSmoke, 0, Alignment.Left));
 
 				if (subtitle.StartsWith("~"))
 				{
