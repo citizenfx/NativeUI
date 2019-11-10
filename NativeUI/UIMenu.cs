@@ -1189,9 +1189,7 @@ namespace NativeUI
 			item.Parent = this;
 			item.Position((MenuItems.Count * 25) - 37 + _extraYOffset);
 			MenuItems.Add(item);
-
-			RecalculateDescriptionPosition();
-
+			ReDraw = true;
 			CurrentSelection = selectedItem;
 		}
 
@@ -1205,7 +1203,6 @@ namespace NativeUI
 			window.Offset = Offset;
 			Windows.Add(window);
 			ReDraw = true;
-			RecalculateDescriptionPosition();
 		}
 
 		/// <summary>
@@ -1216,7 +1213,6 @@ namespace NativeUI
 		{
 			Windows.RemoveAt(index);
 			ReDraw = true;
-			RecalculateDescriptionPosition();
 		}
 
 		/// <summary>
@@ -1240,7 +1236,7 @@ namespace NativeUI
 				_minItem--;
 			}
 			MenuItems.RemoveAt(index);
-			RecalculateDescriptionPosition();
+			ReDraw = true;
 			CurrentSelection = selectedItem;
 		}
 
@@ -1270,7 +1266,7 @@ namespace NativeUI
 		public void Clear()
 		{
 			MenuItems.Clear();
-			RecalculateDescriptionPosition();
+			ReDraw = true;
 		}
 
 		/// <summary>
@@ -1287,7 +1283,7 @@ namespace NativeUI
 					MenuItems.Remove(item);
 				}
 			}
-			RecalculateDescriptionPosition();
+			ReDraw = true;
 		}
 
 		private float CalculateWindowHeight()
