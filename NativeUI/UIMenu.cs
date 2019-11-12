@@ -2103,12 +2103,12 @@ namespace NativeUI
 				return;
 			}
 
-			if (HasControlJustBeenReleaseed(MenuControls.Back, key))
+			if (HasControlJustBeenReleaseed(MenuControls.Back, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				GoBack();
 			}
 			if (MenuItems.Count == 0) return;
-			if (IsControlBeingPressed(MenuControls.Up, key))
+			if (IsControlBeingPressed(MenuControls.Up, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				if (Size > MaxItemsOnScreen + 1)
 					GoUpOverflow();
@@ -2117,7 +2117,7 @@ namespace NativeUI
 				UpdateScaleform();
 			}
 
-			else if (IsControlBeingPressed(MenuControls.Down, key))
+			else if (IsControlBeingPressed(MenuControls.Down, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				if (Size > MaxItemsOnScreen + 1)
 					GoDownOverflow();
@@ -2126,17 +2126,17 @@ namespace NativeUI
 				UpdateScaleform();
 			}
 
-			else if (IsControlBeingPressed(MenuControls.Left, key))
+			else if (IsControlBeingPressed(MenuControls.Left, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				GoLeft();
 			}
 
-			else if (IsControlBeingPressed(MenuControls.Right, key))
+			else if (IsControlBeingPressed(MenuControls.Right, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				GoRight();
 			}
 
-			else if (HasControlJustBeenPressed(MenuControls.Select, key))
+			else if (HasControlJustBeenPressed(MenuControls.Select, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				SelectItem();
 			}
