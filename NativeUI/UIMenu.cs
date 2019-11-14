@@ -1189,9 +1189,7 @@ namespace NativeUI
 			item.Parent = this;
 			item.Position((MenuItems.Count * 25) - 37 + _extraYOffset);
 			MenuItems.Add(item);
-
-			RecalculateDescriptionPosition();
-
+			ReDraw = true;
 			CurrentSelection = selectedItem;
 		}
 
@@ -1205,7 +1203,6 @@ namespace NativeUI
 			window.Offset = Offset;
 			Windows.Add(window);
 			ReDraw = true;
-			RecalculateDescriptionPosition();
 		}
 
 		/// <summary>
@@ -1216,7 +1213,6 @@ namespace NativeUI
 		{
 			Windows.RemoveAt(index);
 			ReDraw = true;
-			RecalculateDescriptionPosition();
 		}
 
 		/// <summary>
@@ -1240,7 +1236,7 @@ namespace NativeUI
 				_minItem--;
 			}
 			MenuItems.RemoveAt(index);
-			RecalculateDescriptionPosition();
+			ReDraw = true;
 			CurrentSelection = selectedItem;
 		}
 
@@ -1270,7 +1266,7 @@ namespace NativeUI
 		public void Clear()
 		{
 			MenuItems.Clear();
-			RecalculateDescriptionPosition();
+			ReDraw = true;
 		}
 
 		/// <summary>
@@ -1287,7 +1283,7 @@ namespace NativeUI
 					MenuItems.Remove(item);
 				}
 			}
-			RecalculateDescriptionPosition();
+			ReDraw = true;
 		}
 
 		private float CalculateWindowHeight()
@@ -2107,12 +2103,12 @@ namespace NativeUI
 				return;
 			}
 
-			if (HasControlJustBeenReleaseed(MenuControls.Back, key))
+			if (HasControlJustBeenReleaseed(MenuControls.Back, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				GoBack();
 			}
 			if (MenuItems.Count == 0) return;
-			if (IsControlBeingPressed(MenuControls.Up, key))
+			if (IsControlBeingPressed(MenuControls.Up, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				if (Size > MaxItemsOnScreen + 1)
 					GoUpOverflow();
@@ -2121,7 +2117,7 @@ namespace NativeUI
 				UpdateScaleform();
 			}
 
-			else if (IsControlBeingPressed(MenuControls.Down, key))
+			else if (IsControlBeingPressed(MenuControls.Down, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				if (Size > MaxItemsOnScreen + 1)
 					GoDownOverflow();
@@ -2130,17 +2126,17 @@ namespace NativeUI
 				UpdateScaleform();
 			}
 
-			else if (IsControlBeingPressed(MenuControls.Left, key))
+			else if (IsControlBeingPressed(MenuControls.Left, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				GoLeft();
 			}
 
-			else if (IsControlBeingPressed(MenuControls.Right, key))
+			else if (IsControlBeingPressed(MenuControls.Right, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				GoRight();
 			}
 
-			else if (HasControlJustBeenPressed(MenuControls.Select, key))
+			else if (HasControlJustBeenPressed(MenuControls.Select, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
 				SelectItem();
 			}
