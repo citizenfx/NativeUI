@@ -67,7 +67,8 @@ namespace NativeUI
 
 		private async void Functions()
 		{
-			if (ScreenTools.IsMouseInBounds(new PointF(BackgroundBar.Position.X, BackgroundBar.Position.Y - 4f), new SizeF(BackgroundBar.Size.Width, BackgroundBar.Size.Height + 8f)))
+			Point safezoneOffset = ScreenTools.SafezoneBounds;
+			if (ScreenTools.IsMouseInBounds(new PointF(BackgroundBar.Position.X + safezoneOffset.X, BackgroundBar.Position.Y - 4f + safezoneOffset.Y), new SizeF(BackgroundBar.Size.Width, BackgroundBar.Size.Height + 8f)))
 			{
 				if (API.IsDisabledControlPressed(0, 24))
 				{
@@ -76,12 +77,12 @@ namespace NativeUI
 						Pressed = true;
 						Audio.Id = API.GetSoundId();
 						API.PlaySoundFrontend(Audio.Id, Audio.Slider, Audio.Library, true);
-						while (API.IsDisabledControlPressed(0, 24) && ScreenTools.IsMouseInBounds(new PointF(BackgroundBar.Position.X, BackgroundBar.Position.Y - 4f), new SizeF(BackgroundBar.Size.Width, BackgroundBar.Size.Height + 8f)))
+						while (API.IsDisabledControlPressed(0, 24) && ScreenTools.IsMouseInBounds(new PointF(BackgroundBar.Position.X + safezoneOffset.X, BackgroundBar.Position.Y - 4f + safezoneOffset.Y), new SizeF(BackgroundBar.Size.Width, BackgroundBar.Size.Height + 8f)))
 						{
 							await BaseScript.Delay(0);
 							var res = ScreenTools.ResolutionMaintainRatio;
 							float Progress = API.GetDisabledControlNormal(0, 239) * res.Width;
-							Progress -= ActiveBar.Position.X;
+							Progress -= ActiveBar.Position.X + safezoneOffset.X;
 							ActiveBar.Size = new SizeF(Progress >= 0 && Progress <= 413 ? Progress : (Progress < 0 ? 0 : 413), ActiveBar.Size.Height);
 							UpdateParent((float)Math.Round(Progress >= 0 && Progress <= 413 ? Progress : (Progress < 0 ? 0 : 413) / BackgroundBar.Size.Width, 2));
 						}
