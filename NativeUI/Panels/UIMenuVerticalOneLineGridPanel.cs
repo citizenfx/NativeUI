@@ -84,7 +84,7 @@ namespace NativeUI
 							var res = ScreenTools.ResolutionMaintainRatio;
 							float mouseY = API.GetDisabledControlNormal(0, 240) * res.Height;
 							mouseY -= (Circle.Size.Height / 2) + safezoneOffset.Y;
-							Circle.Position = new PointF(0.5f, mouseY > (Grid.Position.Y + 10 + Grid.Size.Height - 40) ? (Grid.Position.Y + 10 + Grid.Size.Height - 40) : ((mouseY < (Grid.Position.Y + 20 - (Circle.Size.Height / 2))) ? (Grid.Position.Y + 20 - (Circle.Size.Height / 2)) : mouseY));
+							Circle.Position = new PointF(Circle.Position.X, mouseY > (Grid.Position.Y + 10 + Grid.Size.Height - 40) ? (Grid.Position.Y + 10 + Grid.Size.Height - 40) : ((mouseY < (Grid.Position.Y + 20 - (Circle.Size.Height / 2))) ? (Grid.Position.Y + 20 - (Circle.Size.Height / 2)) : mouseY));
 							var resultY = (float)Math.Round((Circle.Position.Y - (Grid.Position.Y + 20) + (Circle.Size.Height + 20)) / (Grid.Size.Height - 40), 2);
 							UpdateParent(((resultY >= 0.0f && resultY <= 1.0f) ? resultY : ((resultY <= 0f) ? 0.0f : 1.0f) * 2f) - 1f);
 						}
