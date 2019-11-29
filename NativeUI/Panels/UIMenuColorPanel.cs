@@ -134,15 +134,16 @@ namespace NativeUI
 
 		private void Functions()
 		{
-			if (ScreenTools.IsMouseInBounds(LeftArrow.Position, LeftArrow.Size))
+			Point safezoneOffset = ScreenTools.SafezoneBounds;
+			if (ScreenTools.IsMouseInBounds(new PointF(LeftArrow.Position.X + safezoneOffset.X, LeftArrow.Position.Y + safezoneOffset.Y), LeftArrow.Size))
 				if (API.IsDisabledControlJustPressed(0, 24) || API.IsControlJustPressed(0, 24))
 					GoLeft();
-			if (ScreenTools.IsMouseInBounds(RightArrow.Position, RightArrow.Size))
+			if (ScreenTools.IsMouseInBounds(new PointF(RightArrow.Position.X + safezoneOffset.X, RightArrow.Position.Y + safezoneOffset.Y), RightArrow.Size))
 				if (API.IsDisabledControlJustPressed(0, 24) || API.IsControlJustPressed(0, 24))
 					GoRight();
 			for (int Index = 0; Index < Bar.Count; Index++)
 			{
-				if (ScreenTools.IsMouseInBounds(Bar[Index].Position, Bar[Index].Size))
+				if (ScreenTools.IsMouseInBounds(new PointF(Bar[Index].Position.X + safezoneOffset.X, Bar[Index].Position.Y + safezoneOffset.Y), Bar[Index].Size))
 					if (API.IsDisabledControlJustPressed(0, 24) || API.IsControlJustPressed(0, 24))
 					{
 						CurrentSelection = Data.Pagination.Min + Index;
