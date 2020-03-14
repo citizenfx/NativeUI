@@ -867,6 +867,7 @@ namespace NativeUI
 		private readonly UIResRectangle _extraRectangleDown;
 
 		private readonly Scaleform _instructionalButtonsScaleform;
+		private readonly Scaleform _menuGlare;
 
 		private readonly int _extraYOffset;
 
@@ -879,6 +880,8 @@ namespace NativeUI
 		private SizeF BackgroundSize { get; set; }
 		private SizeF DrawWidth { get; set; }
 		private bool ReDraw = true;
+
+		private bool Glare;
 
 		internal readonly static string _selectTextLocalized = Game.GetGXTEntry("HUD_INPUT2");
 		internal readonly static string _backTextLocalized = Game.GetGXTEntry("HUD_INPUT3");
@@ -986,7 +989,8 @@ namespace NativeUI
 		/// </summary>
 		/// <param name="title">Title that appears on the big banner.</param>
 		/// <param name="subtitle">Subtitle that appears in capital letters in a small black bar.</param>
-		public UIMenu(string title, string subtitle) : this(title, subtitle, new PointF(0, 0), "commonmenu", "interaction_bgd")
+		/// <param name="glare">Add menu Glare scaleform?.</param>
+		public UIMenu(string title, string subtitle, bool glare = false) : this(title, subtitle, new PointF(0, 0), "commonmenu", "interaction_bgd", glare)
 		{
 		}
 
@@ -997,7 +1001,8 @@ namespace NativeUI
 		/// <param name="title">Title that appears on the big banner.</param>
 		/// <param name="subtitle">Subtitle that appears in capital letters in a small black bar. Set to "" if you dont want a subtitle.</param>
 		/// <param name="offset">PointF object with X and Y data for offsets. Applied to all menu elements.</param>
-		public UIMenu(string title, string subtitle, PointF offset) : this(title, subtitle, offset, "commonmenu", "interaction_bgd")
+		/// <param name="glare">Add menu Glare scaleform?.</param>
+		public UIMenu(string title, string subtitle, PointF offset, bool glare = false) : this(title, subtitle, offset, "commonmenu", "interaction_bgd", glare)
 		{
 		}
 
@@ -1008,7 +1013,8 @@ namespace NativeUI
 		/// <param name="subtitle">Subtitle that appears in capital letters in a small black bar. Set to "" if you dont want a subtitle.</param>
 		/// <param name="offset">PointF object with X and Y data for offsets. Applied to all menu elements.</param>
 		/// <param name="customBanner">Path to your custom texture.</param>
-		public UIMenu(string title, string subtitle, PointF offset, string customBanner) : this(title, subtitle, offset, "commonmenu", "interaction_bgd")
+		/// <param name="glare">Add menu Glare scaleform?.</param>
+		public UIMenu(string title, string subtitle, PointF offset, string customBanner) : this(title, subtitle, offset, "commonmenu", "interaction_bgd", false)
 		{
 			BannerTexture = customBanner;
 		}
@@ -1022,13 +1028,15 @@ namespace NativeUI
 		/// <param name="offset">PointF object with X and Y data for offsets. Applied to all menu elements.</param>
 		/// <param name="spriteLibrary">Sprite library name for the banner.</param>
 		/// <param name="spriteName">Sprite name for the banner.</param>
-		public UIMenu(string title, string subtitle, PointF offset, string spriteLibrary, string spriteName)
+		/// <param name="glare">Add menu Glare scaleform?.</param>
+		public UIMenu(string title, string subtitle, PointF offset, string spriteLibrary, string spriteName, bool glare = false)
 		{
 			Offset = offset;
 			Children = new Dictionary<UIMenuItem, UIMenu>();
 			WidthOffset = 0;
-
+			Glare = glare;
 			_instructionalButtonsScaleform = new Scaleform("instructional_buttons");
+			_menuGlare = new Scaleform("mp_menu_glare");
 			UpdateScaleform();
 
 			_mainMenu = new Container(new PointF(0, 0), new SizeF(700, 500), Color.FromArgb(0, 0, 0, 0));
@@ -1866,7 +1874,7 @@ namespace NativeUI
 			if (String.IsNullOrWhiteSpace(BannerTexture))
 			{
 				if (BannerSprite  != null)
-					BannerSprite .Draw();
+					BannerSprite.Draw();
 				else
 				{
 					BannerRectangle?.Draw();
@@ -1879,6 +1887,17 @@ namespace NativeUI
 				//Sprite.DrawTexture(BannerTexture, new PointF(start.X + Offset.X, start.Y + Offset.Y), DrawWidth);
 			}
 			_mainMenu.Draw();
+			if (Glare)
+			{
+				float x;
+				float y;
+				float width = 1.0f;
+				float height = 1.042f;
+				x = BannerSprite.Position.X / 1860 + Safe.X / 53.211f + 0.4485f;
+				y = BannerSprite.Position.Y / 1080 + Safe.Y / 33.195020746888f + 0.468f;
+				_menuGlare.CallFunction("SET_DATA_SLOT", API.GetGameplayCamRelativeHeading());
+				API.DrawScaleformMovie(_menuGlare.Handle, x, y, width, height, 255, 255, 255, 255, 0);
+			}
 			if (MenuItems.Count == 0 && Windows.Count == 0)
 			{
 				API.ResetScriptGfxAlign(); // Safezone end

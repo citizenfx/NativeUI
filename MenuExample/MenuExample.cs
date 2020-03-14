@@ -199,7 +199,7 @@ public class MenuExample : BaseScript
 	public MenuExample()
 	{
 		_menuPool = new MenuPool();
-		var mainMenu = new UIMenu("Native UI", "~b~NATIVEUI SHOWCASE");
+		var mainMenu = new UIMenu("Native UI", "~b~NATIVEUI SHOWCASE", true); // true means add menu Glare scaleform to the menu
 		_menuPool.Add(mainMenu);
 		HeritageMenu(mainMenu);
 		AddMenuKetchup(mainMenu);
