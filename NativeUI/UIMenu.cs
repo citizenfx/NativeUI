@@ -1889,14 +1889,15 @@ namespace NativeUI
 			_mainMenu.Draw();
 			if (Glare)
 			{
-				float x;
-				float y;
-				float width = 1.0f;
-				float height = 1.042f;
-				x = BannerSprite.Position.X / 1920 + Safe.X / 53.211f + 0.4485f;
-				y = BannerSprite.Position.Y / 1080 + Safe.Y / 33.195020746888f + 0.468f;
-				_menuGlare.CallFunction("SET_DATA_SLOT", API.GetGameplayCamRelativeHeading());
-				API.DrawScaleformMovie(_menuGlare.Handle, x, y, width, height, 255, 255, 255, 255, 0);
+				_menuGlare.CallFunction("SET_DATA_SLOT", GameplayCamera.RelativeHeading);
+				var res = ScreenTools.ResolutionMaintainRatio;
+				SizeF _glareSize = new SizeF(1.0f, 1.054f);
+				PointF gl = new PointF(
+					(Offset.X / res.Width) + 0.4491f,
+					(Offset.Y / res.Height) + 0.475f
+				);
+
+				API.DrawScaleformMovie(_menuGlare.Handle, gl.X, gl.Y, _glareSize.Width, _glareSize.Height, 255, 255, 255, 255, 0);
 			}
 			if (MenuItems.Count == 0 && Windows.Count == 0)
 			{
