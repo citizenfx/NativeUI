@@ -111,8 +111,7 @@ namespace NativeUI
 						while (API.IsDisabledControlPressed(0, 24) && ScreenTools.IsMouseInBounds(new PointF(_bar.Position.X, _bar.Position.Y - 7.5f), new SizeF(_max, _bar.Size.Height + 19)))
 						{
 							await BaseScript.Delay(0);
-							var ress = ScreenTools.ResolutionMaintainRatio;
-							float CursorX = API.GetDisabledControlNormal(0, 239) * ress.Width;
+							float CursorX = API.GetDisabledControlNormal(0, 239) * Resolution.Width;
 							CalculateProgress(CursorX);
 							Parent.ProgressChange(this, _index);
 							ProgressChanged(Parent, this, _index);

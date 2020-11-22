@@ -20,6 +20,7 @@ namespace NativeUI
 		private PointF SetCirclePosition;
 		protected bool CircleLocked = false;
 		protected bool Pressed;
+		private readonly PointF safezoneOffset = ScreenTools.SafezoneBounds;
 		public PointF CirclePosition
 		{
 			get
@@ -72,35 +73,38 @@ namespace NativeUI
 
 		internal async void Functions()
 		{
-			Point safezoneOffset = ScreenTools.SafezoneBounds;
 			if (ScreenTools.IsMouseInBounds(new PointF(Grid.Position.X + 20f + safezoneOffset.X, Grid.Position.Y + 20f + safezoneOffset.Y), new SizeF(Grid.Size.Width - 40f, Grid.Size.Height - 40f)))
 			{
 				if (API.IsDisabledControlPressed(0, 24))
 				{
 					if (!Pressed)
 					{
-						Pressed = true;
 						Audio.Id = API.GetSoundId();
 						API.PlaySoundFrontend(Audio.Id, Audio.Slider, Audio.Library, true);
-						while (API.IsDisabledControlPressed(0, 24) && ScreenTools.IsMouseInBounds(new PointF(Grid.Position.X + 20f + safezoneOffset.X, Grid.Position.Y + 20f + safezoneOffset.Y), new SizeF(Grid.Size.Width - 40f, Grid.Size.Height - 40f)))
-						{
-							await BaseScript.Delay(0);
-							var res = ScreenTools.ResolutionMaintainRatio;
-							float mouseX = API.GetDisabledControlNormal(0, 239) * res.Width;
-							float mouseY = API.GetDisabledControlNormal(0, 240) * res.Height;
-							mouseX -= (Circle.Size.Width / 2) + safezoneOffset.X;
-							mouseY -= (Circle.Size.Height / 2) + safezoneOffset.Y;
-							PointF Position = new PointF(mouseX > (Grid.Position.X + 10 + Grid.Size.Width - 40) ? (Grid.Position.X + 10 + Grid.Size.Width - 40) : ((mouseX < (Grid.Position.X + 20 - (Circle.Size.Width / 2))) ? (Grid.Position.X + 20 - (Circle.Size.Width / 2)) : mouseX), mouseY > (Grid.Position.Y + 10 + Grid.Size.Height - 40) ? (Grid.Position.Y + 10 + Grid.Size.Height - 40) : ((mouseY < (Grid.Position.Y + 20 - (Circle.Size.Height / 2))) ? (Grid.Position.Y + 20 - (Circle.Size.Height / 2)) : mouseY));
-							Circle.Position = Position;
-							var resultX = (float)Math.Round((Circle.Position.X - (Grid.Position.X + 20) + (Circle.Size.Width + 20)) / (Grid.Size.Width - 40), 2) + safezoneOffset.X;
-							var resultY = (float)Math.Round((Circle.Position.Y - (Grid.Position.Y + 20) + (Circle.Size.Height + 20)) / (Grid.Size.Height - 40), 2) + safezoneOffset.Y;
-							UpdateParent(((resultX >= 0.0f && resultX <= 1.0f) ? resultX : ((resultX <= 0f) ? 0.0f : 1.0f) * 2f) - 1f, ((resultY >= 0.0f && resultY <= 1.0f) ? resultY : ((resultY <= 0f) ? 0.0f : 1.0f) * 2f) - 1f);
-						}
-						API.StopSound(Audio.Id);
-						API.ReleaseSoundId(Audio.Id);
-						Pressed = false;
+						Pressed = true;
 					}
+					float mouseX = API.GetDisabledControlNormal(0, 239) * Resolution.Width;
+					float mouseY = API.GetDisabledControlNormal(0, 240) * Resolution.Height;
+					mouseX -= (Circle.Size.Width / 2) + safezoneOffset.X;
+					mouseY -= (Circle.Size.Height / 2) + safezoneOffset.Y;
+					PointF Position = new PointF(mouseX > (Grid.Position.X + 10 + Grid.Size.Width - 40) ? (Grid.Position.X + 10 + Grid.Size.Width - 40) : ((mouseX < (Grid.Position.X + 20 - (Circle.Size.Width / 2))) ? (Grid.Position.X + 20 - (Circle.Size.Width / 2)) : mouseX), mouseY > (Grid.Position.Y + 10 + Grid.Size.Height - 40) ? (Grid.Position.Y + 10 + Grid.Size.Height - 40) : ((mouseY < (Grid.Position.Y + 20 - (Circle.Size.Height / 2))) ? (Grid.Position.Y + 20 - (Circle.Size.Height / 2)) : mouseY));
+					Circle.Position = Position;
+					var resultX = ((Circle.Position.X - (Grid.Position.X + 20) + (Circle.Size.Width + 20)) / (Grid.Size.Width - 40)) + safezoneOffset.X;
+					var resultY = ((Circle.Position.Y - (Grid.Position.Y + 20) + (Circle.Size.Height + 20)) / (Grid.Size.Height - 40)) + safezoneOffset.Y;
+					UpdateParent(((resultX >= 0.0f && resultX <= 2.0f) ? resultX : ((resultX <= 0f) ? 0.0f : 1.2f) * 2f) - 1f, ((resultY >= 0.0f && resultY <= 1.0f) ? resultY : ((resultY <= 0f) ? 0.0f : 1.0f) * 2f) - 1f);
 				}
+				if (API.IsDisabledControlJustReleased(0, 24))
+				{
+					API.StopSound(Audio.Id);
+					API.ReleaseSoundId(Audio.Id);
+					Pressed = false;
+				}
+			}
+			else
+			{
+				API.StopSound(Audio.Id);
+				API.ReleaseSoundId(Audio.Id);
+				Pressed = false;
 			}
 		}
 

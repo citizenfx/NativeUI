@@ -96,13 +96,11 @@ namespace NativeUI.PauseMenu
             if (!Visible) return;
             base.Draw();
 
-            var res = ScreenTools.ResolutionMaintainRatio;
-
             var alpha = Focused ? 120 : 30;
             var blackAlpha = Focused ? 200 : 100;
             var fullAlpha = Focused ? 255 : 150;
 
-            var activeWidth = res.Width - SafeSize.X * 2;
+            var activeWidth = Resolution.Width - SafeSize.X * 2;
             var submenuWidth = (int)(activeWidth * 0.6818f);
             var itemSize = new SizeF((int)activeWidth - (submenuWidth + 3), 40);
 
@@ -148,7 +146,7 @@ namespace NativeUI.PauseMenu
             Items[Index].UseDynamicPositionment = false;
             Items[Index].SafeSize = SafeSize.AddPoints(new PointF((int)activeWidth - submenuWidth, 0));
             Items[Index].TopLeft = SafeSize.AddPoints(new PointF((int)activeWidth - submenuWidth, 0));
-            Items[Index].BottomRight = new PointF((int)res.Width - SafeSize.X, (int)res.Height - SafeSize.Y);
+            Items[Index].BottomRight = new PointF((int)Resolution.Width - SafeSize.X, (int)Resolution.Height - SafeSize.Y);
             Items[Index].Draw();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace NativeUI
 	public class UIMenuPanel
 	{
 		internal dynamic Background;
+		protected SizeF Resolution = ScreenTools.ResolutionMaintainRatio;
 		public UIMenuPanel()
 		{
 		}

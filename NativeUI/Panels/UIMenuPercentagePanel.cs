@@ -17,13 +17,13 @@ namespace NativeUI
 		private UIResText Min;
 		private UIResText Max;
 		private UIResText Title;
+		private readonly PointF safezoneOffset = ScreenTools.SafezoneBounds;
 		private bool Pressed;
 		public float Percentage
 		{
 			get
 			{
-				var res = ScreenTools.ResolutionMaintainRatio;
-				float progress = (float)Math.Round(API.GetDisabledControlNormal(0, 239) * res.Width) - ActiveBar.Position.X;
+				float progress = (float)Math.Round(API.GetDisabledControlNormal(0, 239) * Resolution.Width) - ActiveBar.Position.X;
 				return (float)Math.Round(((progress >= 0 && progress <= 413) ? progress : ((progress < 0) ? 0 : 413)) / Background.Size.Width, 2);
 			}
 			set
@@ -67,7 +67,6 @@ namespace NativeUI
 
 		private async void Functions()
 		{
-			Point safezoneOffset = ScreenTools.SafezoneBounds;
 			if (ScreenTools.IsMouseInBounds(new PointF(BackgroundBar.Position.X + safezoneOffset.X, BackgroundBar.Position.Y - 4f + safezoneOffset.Y), new SizeF(BackgroundBar.Size.Width, BackgroundBar.Size.Height + 8f)))
 			{
 				if (API.IsDisabledControlPressed(0, 24))
@@ -77,20 +76,26 @@ namespace NativeUI
 						Pressed = true;
 						Audio.Id = API.GetSoundId();
 						API.PlaySoundFrontend(Audio.Id, Audio.Slider, Audio.Library, true);
-						while (API.IsDisabledControlPressed(0, 24) && ScreenTools.IsMouseInBounds(new PointF(BackgroundBar.Position.X + safezoneOffset.X, BackgroundBar.Position.Y - 4f + safezoneOffset.Y), new SizeF(BackgroundBar.Size.Width, BackgroundBar.Size.Height + 8f)))
-						{
-							await BaseScript.Delay(0);
-							var res = ScreenTools.ResolutionMaintainRatio;
-							float Progress = API.GetDisabledControlNormal(0, 239) * res.Width;
-							Progress -= ActiveBar.Position.X + safezoneOffset.X;
-							ActiveBar.Size = new SizeF(Progress >= 0 && Progress <= 413 ? Progress : (Progress < 0 ? 0 : 413), ActiveBar.Size.Height);
-							UpdateParent((float)Math.Round(Progress >= 0 && Progress <= 413 ? Progress : (Progress < 0 ? 0 : 413) / BackgroundBar.Size.Width, 2));
-						}
-						API.StopSound(Audio.Id);
-						API.ReleaseSoundId(Audio.Id);
-						Pressed = false;
 					}
+					await BaseScript.Delay(0);
+					float Progress = API.GetDisabledControlNormal(0, 239) * Resolution.Width;
+					Progress -= ActiveBar.Position.X + safezoneOffset.X;
+					ActiveBar.Size = new SizeF(Progress >= 0 && Progress <= 413 ? Progress : (Progress < 0 ? 0 : 413), ActiveBar.Size.Height);
+					UpdateParent((float)Math.Round(Progress >= 0 && Progress <= 413 ? Progress : (Progress < 0 ? 0 : 413) / BackgroundBar.Size.Width, 2));
 				}
+				else
+				{
+					API.StopSound(Audio.Id);
+					API.ReleaseSoundId(Audio.Id);
+					Pressed = false;
+
+				}
+			}
+			else
+			{
+				API.StopSound(Audio.Id);
+				API.ReleaseSoundId(Audio.Id);
+				Pressed = false;
 			}
 		}
 

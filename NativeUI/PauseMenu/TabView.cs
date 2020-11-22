@@ -31,6 +31,8 @@ namespace NativeUI.PauseMenu
         public bool CanLeave { get; set; }
         public bool HideTabs { get; set; }
 
+        protected readonly SizeF Resolution = ScreenTools.ResolutionMaintainRatio;
+
         internal readonly static string _browseTextLocalized = Game.GetGXTEntry("HUD_INPUT1C");
 
         public event EventHandler OnMenuClose;
@@ -40,20 +42,21 @@ namespace NativeUI.PauseMenu
             get { return _visible; }
             set
             {
-                _visible = value;
-
                 if (value)
                 {
-                    Screen.Effects.Start(ScreenEffect.MinigameTransitionIn);
-
+                    API.SetPauseMenuActive(true);
+                    Screen.Effects.Start(ScreenEffect.FocusOut, 800);
+                    API.TransitionToBlurred(700);
                 }
                 else
                 {
-					Screen.Effects.Stop(ScreenEffect.MinigameTransitionIn);
+                    API.SetPauseMenuActive(false);
+                    Screen.Effects.Start(ScreenEffect.FocusOut, 500);
+                    API.TransitionFromBlurred(400);
                 }
+                _visible = value;
             }
         }
-
         public void AddTab(TabItem item)
         {
             Tabs.Add(item);
@@ -206,7 +209,7 @@ namespace NativeUI.PauseMenu
             FocusLevel = 0;
         }
 
-        public void Update()
+        public void Draw()
         {
             if (!Visible || TemporarilyHidden) return;
             ShowInstructionalButtons();
@@ -214,30 +217,24 @@ namespace NativeUI.PauseMenu
             API.ShowCursorThisFrame();
 
 
-            var res = ScreenTools.ResolutionMaintainRatio;
             var safe = new PointF(300, 180);
             if (!HideTabs)
             {
-                new UIResText(Title, new PointF(safe.X, safe.Y - 80), 1f, Colors.White, Font.ChaletComprimeCologne,
-                    Alignment.Left)
+                new UIResText(Title, new PointF(safe.X, safe.Y - 80), 1f, Colors.White, Font.ChaletComprimeCologne, Alignment.Left)
                 {
                     Shadow = true,
                 }.Draw();
 
                 if (Photo == null)
-                {
-                    new Sprite("char_multiplayer", "char_multiplayer",
-                        new PointF((int)res.Width - safe.X - 64, safe.Y - 80), new SizeF(64, 64)).Draw();
-                }
+                    new Sprite("char_multiplayer", "char_multiplayer", new PointF((int)Resolution.Width - safe.X - 64, safe.Y - 90), new SizeF(75, 75)).Draw();
                 else
                 {
-                    Photo.Position = new PointF((int)res.Width - safe.X - 100, safe.Y - 80);
-                    Photo.Size = new SizeF(64, 64);
+                    Photo.Position = new PointF((int)Resolution.Width - safe.X - 100, safe.Y - 90);
+                    Photo.Size = new SizeF(75, 75);
                     Photo.Draw();
                 }
 
-                new UIResText(Name, new PointF((int)res.Width - safe.X - 70, safe.Y - 95), 0.7f, Colors.White,
-                    Font.ChaletComprimeCologne, Alignment.Right)
+                new UIResText(Name, new PointF((int)Resolution.Width - safe.X - 106, safe.Y - 98), 0.5f, Colors.White, Font.ChaletComprimeCologne, Alignment.Right)
                 {
                     Shadow = true,
                 }.Draw();
@@ -249,7 +246,7 @@ namespace NativeUI.PauseMenu
                 }
 
 
-                new UIResText(t, new PointF((int)res.Width - safe.X - 70, safe.Y - 60), 0.4f, Colors.White,
+                new UIResText(t, new PointF((int)Resolution.Width - safe.X - 106, safe.Y - 70), 0.5f, Colors.White,
                     Font.ChaletComprimeCologne, Alignment.Right)
                 {
                     Shadow = true,
@@ -261,7 +258,7 @@ namespace NativeUI.PauseMenu
                     subt = "";
                 }
 
-                new UIResText(subt, new PointF((int)res.Width - safe.X - 70, safe.Y - 40), 0.4f, Colors.White,
+                new UIResText(subt, new PointF((int)Resolution.Width - safe.X - 106, safe.Y - 44), 0.5f, Colors.White,
                     Font.ChaletComprimeCologne, Alignment.Right)
                 {
                     Shadow = true,
@@ -269,8 +266,8 @@ namespace NativeUI.PauseMenu
 
                 for (int i = 0; i < Tabs.Count; i++)
                 {
-                    var activeSize = res.Width - 2 * safe.X;
-                    activeSize -= 4 * 5;
+                    var activeSize = Resolution.Width - 2 * safe.X;
+                    activeSize -= 5;
                     int tabWidth = (int)activeSize / Tabs.Count;
                     Game.EnableControlThisFrame(0, Control.CursorX);
                     Game.EnableControlThisFrame(0, Control.CursorY);
@@ -278,22 +275,12 @@ namespace NativeUI.PauseMenu
                     var hovering = ScreenTools.IsMouseInBounds(safe.AddPoints(new PointF((tabWidth + 5) * i, 0)),
                         new SizeF(tabWidth, 40));
 
-                    var tabColor = Tabs[i].Active
-                        ? Colors.White
-                        : hovering ? Color.FromArgb(100, 50, 50, 50) : Colors.Black;
-                    new UIResRectangle(safe.AddPoints(new PointF((tabWidth + 5) * i, 0)), new SizeF(tabWidth, 40),
-                        Color.FromArgb(Tabs[i].Active ? 255 : 200, tabColor)).Draw();
-
-                    new UIResText(Tabs[i].Title.ToUpper(), safe.AddPoints(new PointF((tabWidth / 2) + (tabWidth + 5) * i, 5)),
-                        0.35f,
-                        Tabs[i].Active ? Colors.Black : Colors.White, Font.ChaletLondon, Alignment.Center)
-                        .Draw();
-
+                    var tabColor = Tabs[i].Active ? Colors.White : hovering ? Color.FromArgb(100, 50, 50, 50) : Colors.Black;
+                    new UIResRectangle(safe.AddPoints(new PointF((tabWidth + 5) * i, 0)), new SizeF(tabWidth, 40), Color.FromArgb(Tabs[i].Active ? 255 : 200, tabColor)).Draw();
                     if (Tabs[i].Active)
-                    {
-                        new UIResRectangle(safe.SubtractPoints(new PointF(-((tabWidth + 5) * i), 10)),
-                            new SizeF(tabWidth, 10), Colors.DodgerBlue).Draw();
-                    }
+                        new UIResRectangle(safe.SubtractPoints(new PointF(-((tabWidth + 5) * i), 10)), new SizeF(tabWidth, 10), Colors.DodgerBlue).Draw();
+
+                    new UIResText(Tabs[i].Title.ToUpper(), safe.AddPoints(new PointF((tabWidth / 2) + (tabWidth + 5) * i, 5)), 0.35f, Tabs[i].Active ? Colors.Black : Colors.White, Font.ChaletLondon, Alignment.Center).Draw();
 
                     if (hovering && Game.IsControlJustPressed(0, Control.CursorAccept) && !Tabs[i].Active)
                     {
