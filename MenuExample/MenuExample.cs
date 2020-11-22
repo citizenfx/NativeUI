@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using CitizenFX.Core;
 using CitizenFX.Core.UI;
 using NativeUI;
+using NativeUI.PauseMenu;
+using CitizenFX.Core.Native;
 
 public class MenuExample : BaseScript
 {
@@ -168,6 +170,14 @@ public class MenuExample : BaseScript
 		menu.AddItem(listPanelItem4);
 		listPanelItem4.AddPanel(statistics);
 
+		UIMenuItem PauseMenu = new UIMenuItem("Open custom pauseMenu");
+		menu.AddItem(PauseMenu);
+		PauseMenu.Activated += (_submenu, item) =>
+		{
+			_menuPool.CloseAllMenus();
+			OpenCustomPauseMenu();
+		};
+
 		// THERE ARE NO EVENTS FOR PANELS.. WHEN YOU CHANGE WHAT IS CHANGABLE THE LISTITEM WILL DO WHATEVER YOU TELL HIM TO DO
 
 		menu.OnListChange += (sender, item, index) =>
@@ -214,5 +224,71 @@ public class MenuExample : BaseScript
 			if (Game.IsControlJustPressed(0, Control.SelectCharacterMichael) && !_menuPool.IsAnyMenuOpen()) // Our menu on/off switch
 				mainMenu.Visible = !mainMenu.Visible;
 		};
+	}
+
+	public async void OpenCustomPauseMenu()
+	{
+		TabView MenuContainer = new TabView("This is the title");
+		_menuPool.AddPauseMenu(MenuContainer);
+
+		int mugshot = API.RegisterPedheadshot(API.PlayerPedId());
+		while (!API.IsPedheadshotReady(mugshot)) await BaseScript.Delay(1);
+		string Txd = API.GetPedheadshotTxdString(mugshot);
+
+		MenuContainer.Photo = new NativeUI.Sprite(Txd, Txd, PointF.Empty, SizeF.Empty); // Position and size can be empty.. they'll be handled by the TabView
+		//this will add our player smugshot to the pause menu
+		MenuContainer.Money = "1000"; // if money and moneySubtitle are empty or not used, the current datetime will be printed
+		MenuContainer.MoneySubtitle = "Bank = 10";
+
+		TabItem Item1 = new TabItem("simple TabItem");
+
+		TabTextItem Item2 = new TabTextItem("TabTextItem", "This is the Title inside", "With a cool text to be added where you can write whatever you want");
+
+		TabItemSimpleList Item3 = new TabItemSimpleList("TabItemSimpleList", new Dictionary<string, string>()
+		{
+			["Item 1"] = "subItem 1",
+			["Item 2"] = "subItem 2",
+			["Item 3"] = "subItem 3",
+			["Item 4"] = "subItem 4",
+			["Item 5"] = "subItem 5",
+			["Item 6"] = "subItem 6"
+		});
+
+
+		List<UIMenuItem> items = new List<UIMenuItem>()
+		{
+			new UIMenuItem("Item 1"),
+			new UIMenuCheckboxItem("Item 2", true),
+			new UIMenuListItem("Item 3", new List<dynamic>(){"Item1", 2, 3.0999 }, 0)
+		};
+
+		TabInteractiveListItem Item4 = new TabInteractiveListItem("TabInteractiveListItem", items);
+
+		TabSubmenuItem Item5 = new TabSubmenuItem("TabSubmenuItem", new List<TabItem>()
+		{
+			new TabItem("simple TabItem"),
+			new TabTextItem("TabTextItem", "This is the Title inside", "With a cool text to be added where you can write whatever you want"),
+			new TabItemSimpleList("TabItemSimpleList", new Dictionary<string, string>()
+			{
+				["Item 1"] = "subItem 1",
+				["Item 2"] = "subItem 2",
+				["Item 3"] = "subItem 3",
+				["Item 4"] = "subItem 4",
+				["Item 5"] = "subItem 5",
+				["Item 6"] = "subItem 6"
+			}),
+			new TabInteractiveListItem("TabInteractiveListItem", items)
+		});
+		MenuContainer.AddTab(Item1);
+		MenuContainer.AddTab(Item2);
+		MenuContainer.AddTab(Item3);
+		MenuContainer.AddTab(Item4);
+		MenuContainer.AddTab(Item5);
+		// this way we can choose which tab is the defualt one
+		Item1.Active = true;
+		Item1.Focused = true;
+		Item1.Visible = true;
+		MenuContainer.Visible = true;
+		// items have events exaclty the same as UIMenuItems and you can handle TabInteractiveListItem items just like that
 	}
 }
