@@ -18,7 +18,7 @@ namespace NativeUI
         protected Sprite _badgeRight;
 
         protected UIResText _labelText;
-
+        protected SizeF Resolution = ScreenTools.ResolutionMaintainRatio;
 		public Color MainColor { get; set; }
 		public Color HighlightColor { get; set; }
 

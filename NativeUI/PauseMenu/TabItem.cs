@@ -24,7 +24,7 @@ namespace NativeUI.PauseMenu
         public PointF SafeSize { get; set; }
         public bool UseDynamicPositionment { get; set; }
         public TabView Parent { get; set; }
-
+        protected SizeF Resolution = ScreenTools.ResolutionMaintainRatio;
 
         public event EventHandler Activated;
         public event EventHandler DrawInstructionalButtons;

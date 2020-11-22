@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using NativeUI.PauseMenu;
 using Control = CitizenFX.Core.Control;
 
 namespace NativeUI
@@ -39,7 +40,7 @@ namespace NativeUI
 		public bool OffsetInheritance = true;
 
 		private readonly List<UIMenu> _menuList = new List<UIMenu>();
-
+        private readonly List<TabView> _pauseMenus = new List<TabView>();
 
         /// <summary>
         /// Add your menu to the menu pool.
@@ -48,6 +49,15 @@ namespace NativeUI
         public void Add(UIMenu menu)
         {
             _menuList.Add(menu);
+        }
+
+        /// <summary>
+        /// Add your pause menu to the menu pool.
+        /// </summary>
+        /// <param name="menu"></param>
+        public void AddPauseMenu(TabView menu)
+        {
+            _pauseMenus.Add(menu);
         }
 
         /// <summary>
@@ -224,7 +234,7 @@ namespace NativeUI
         /// <returns>true if at least one menu is visible, false if not.</returns>
         public bool IsAnyMenuOpen()
         {
-            return _menuList.Any(menu => menu.Visible);
+            return _menuList.Any(menu => menu.Visible) || _pauseMenus.Any(x => x.Visible);
         }
 
 
@@ -234,6 +244,8 @@ namespace NativeUI
         public void ProcessMenus()
         {
             ProcessControl();
+            if (_pauseMenus.Count > 0)
+                _pauseMenus.ForEach(x => { x.ProcessControls(); x.Draw(); });
             ProcessMouse();
             Draw();
         }
