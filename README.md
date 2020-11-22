@@ -1,9 +1,9 @@
 # NativeUI
-![NativeUI Example](http://i.imgur.com/nqD2Ty1.png)
+![NativeUI Example](https://forum.cfx.re/uploads/default/original/4X/7/b/a/7ba89f317f1087e512632b7ea30edc11c85d71a7.jpeg)
 
-![Sliders!](https://image.prntscr.com/image/69QUCEuOTruHeqDRtmN2fw.png)
+![PauseMenu Example!](https://forum.cfx.re/uploads/default/original/4X/8/3/5/8354aceac39143276d05108371286a30a013cd90.jpeg)
 
-NativeUI is a ScriptHookDotNet based library that helps you quickly and easily build Rockstar-like menus.
+NativeUI is a library that helps you quickly and easily build Rockstar-like menus and Pause Menus.
 
 ### Documentation
 Take a look at our [wiki page](https://github.com/Guad/NativeUI/wiki/Home).
@@ -11,6 +11,7 @@ Take a look at our [wiki page](https://github.com/Guad/NativeUI/wiki/Home).
 ### Features
 * Support for simple buttons, checkboxes and lists.
 * Support for custom banners from game sprites and your own textures.
+* Support for panels from grid panels to color panels.
 * Easy nested menus for fast and painless nested menu system.
 * Controller support.
 * Mouse controls.
@@ -24,9 +25,6 @@ Take a look at our [wiki page](https://github.com/Guad/NativeUI/wiki/Home).
 ### Distribution
 Please, do not distribute the .dll with your mod. This causes many old versions floating around on the internet. Instead, point your users to [this post](http://gtaforums.com/topic/809284-net-nativeui/).
 
-### Special Thanks
-Thanks to jedijosh920 for helping out on natives and making it look a lot more like Rockstar, thanks man.
-
 ### License
 Copyright (c) 2016 Phillipp
 
@@ -35,5 +33,5 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ### Port to CitizenFX
 This is a ported version to CitizenFX. 
 Developers looking to create C# Resources for [FiveM](https://fivem.net/) can use this port to create custom menus.
-Note, not all features are documented. 
+Note, not all features are documented yet.
 This ported version may contain small changes and some features from the original NativeUI by GUAD have been disabled because they are not available through CitizenFX.
