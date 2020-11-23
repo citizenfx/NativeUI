@@ -188,7 +188,7 @@ namespace NativeUI.PauseMenu
             }
 
             new UIResRectangle(new PointF((int)Resolution.Width - SafeSize.X - (512 + _add), SafeSize.Y + 256), new SizeF(512, 40), Color.FromArgb(fullAlpha, Colors.Black)).Draw();
-            new UIResText(Heists[Index].Name, new PointF((int)Resolution.Width - SafeSize.X - 4, SafeSize.Y + 260), 0.5f, Color.FromArgb(fullAlpha, Colors.White),
+            new UIResText(Heists[Index].Name, new PointF((int)Resolution.Width - SafeSize.X - (4 + _add), SafeSize.Y + 260), 0.5f, Color.FromArgb(fullAlpha, Colors.White),
                 Font.HouseScript, Alignment.Right).Draw();
 
             for (int i = 0; i < Heists[Index].ValueList.Count; i++)
