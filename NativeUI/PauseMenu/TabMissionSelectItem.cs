@@ -62,6 +62,7 @@ namespace NativeUI.PauseMenu
 
     public class TabMissionSelectItem : TabItem
     {
+        protected internal float _add = 0;
         public TabMissionSelectItem(string name, IEnumerable<MissionInformation> list) : base(name)
         {
             base.FadeInWhenFocused = true;
@@ -148,68 +149,69 @@ namespace NativeUI.PauseMenu
             base.Draw();
             if (Heists.Count == 0) return;
 
-            var activeWidth = Resolution.Width - SafeSize.X * 2;
-            var itemSize = new SizeF((int)activeWidth - 515, 40);
 
             var alpha = Focused ? 120 : 30;
             var blackAlpha = Focused ? 200 : 100;
             var fullAlpha = Focused ? 255 : 150;
-
+            Debug.WriteLine("_add = " + _add);
+            var activeWidth = Resolution.Width - SafeSize.X * 2;
+            var itemSize = new SizeF((int)activeWidth - (_add + 515), 40);
+            Debug.WriteLine("itemsize = " + itemSize);
+            Debug.WriteLine("activeWidth = " + activeWidth);
             var counter = 0;
             for (int i = _minItem; i < Math.Min(Heists.Count, _maxItem); i++)
             {
-                new UIResRectangle(SafeSize.AddPoints(new PointF(0, (itemSize.Height + 3) * counter)), itemSize, (Index == i && Focused) ? Color.FromArgb(fullAlpha, Colors.White) : Color.FromArgb(blackAlpha, Colors.Black)).Draw();
-                new UIResText(Heists[i].Name, SafeSize.AddPoints(new PointF(6, 5 + (itemSize.Height + 3) * counter)), 0.35f, Color.FromArgb(fullAlpha, (Index == i && Focused) ? Colors.Black : Colors.White)).Draw();
+                new UIResRectangle(SafeSize.AddPoints(new PointF(0, 43 * counter)), itemSize, (Index == i && Focused) ? Color.FromArgb(fullAlpha, Colors.White) : Color.FromArgb(blackAlpha, Colors.Black)).Draw();
+                new UIResText(Heists[i].Name, SafeSize.AddPoints(new PointF(6, 5 + 43 * counter)), 0.35f, Color.FromArgb(fullAlpha, (Index == i && Focused) ? Colors.Black : Colors.White)).Draw();
                 counter++;
             }
 
             if (Heists[Index].Logo == null || string.IsNullOrEmpty(Heists[Index].Logo.FileName))
             {
-                _noLogo.Position = new PointF((int)Resolution.Width - SafeSize.X - 512, SafeSize.Y);
+                _noLogo.Position = new PointF((int)Resolution.Width - SafeSize.X - (512 + _add), SafeSize.Y);
                 _noLogo.Color = Color.FromArgb(blackAlpha, 0, 0, 0);
                 _noLogo.Draw();
             }
             else if (Heists[Index].Logo != null && Heists[Index].Logo.FileName != null && !Heists[Index].Logo.IsGameTexture)
             {
-                var target = Heists[Index].Logo.FileName;
+                //var target = Heists[Index].Logo.FileName;
                 //Sprite.DrawTexture(target, new PointF((int)Resolution.Width - SafeSize.X - 512, SafeSize.Y), new SizeF(512, 256));
             }
             else if (Heists[Index].Logo != null && Heists[Index].Logo.FileName != null &&
                      Heists[Index].Logo.IsGameTexture)
             {
-                var newLogo = new Sprite(Heists[Index].Logo.DictionaryName, Heists[Index].Logo.FileName, new PointF(), new SizeF(512, 256))
+                var newLogo = new Sprite(Heists[Index].Logo.DictionaryName, Heists[Index].Logo.FileName, new PointF((int)Resolution.Width - SafeSize.X - (512 + _add), SafeSize.Y), new SizeF(512, 256))
                 {
-                    Position = new PointF((int)Resolution.Width - SafeSize.X - 512, SafeSize.Y),
                     Color = Color.FromArgb(blackAlpha, 0, 0, 0)
                 };
                 newLogo.Draw();
             }
 
-            new UIResRectangle(new PointF((int)Resolution.Width - SafeSize.X - 512, SafeSize.Y + 256), new SizeF(512, 40), Color.FromArgb(fullAlpha, Colors.Black)).Draw();
-            new UIResText(Heists[Index].Name, new PointF((int)Resolution.Width - SafeSize.X - 4, SafeSize.Y + 260), 0.5f, Color.FromArgb(fullAlpha, Colors.White),
+            new UIResRectangle(new PointF((int)Resolution.Width - SafeSize.X - (512 + _add), SafeSize.Y + 256), new SizeF(512, 40), Color.FromArgb(fullAlpha, Colors.Black)).Draw();
+            new UIResText(Heists[Index].Name, new PointF((int)Resolution.Width - SafeSize.X - (4 + _add), SafeSize.Y + 260), 0.5f, Color.FromArgb(fullAlpha, Colors.White),
                 Font.HouseScript, Alignment.Right).Draw();
 
             for (int i = 0; i < Heists[Index].ValueList.Count; i++)
             {
-                new UIResRectangle(new PointF((int)Resolution.Width - SafeSize.X - 512, SafeSize.Y + 256 + 40 + (40 * i)),
+                new UIResRectangle(new PointF((int)Resolution.Width - SafeSize.X - (512 + _add), SafeSize.Y + 256 + 40 + (40 * i)),
                     new SizeF(512, 40), i % 2 == 0 ? Color.FromArgb(alpha, 0, 0, 0) : Color.FromArgb(blackAlpha, 0, 0, 0)).Draw();
                 var text = Heists[Index].ValueList[i].Item1;
                 var label = Heists[Index].ValueList[i].Item2;
 
 
-                new UIResText(text, new PointF((int)Resolution.Width - SafeSize.X - 506, SafeSize.Y + 260 + 42 + (40 * i)), 0.35f, Color.FromArgb(fullAlpha, Colors.White)).Draw();
-                new UIResText(label, new PointF((int)Resolution.Width - SafeSize.X - 6, SafeSize.Y + 260 + 42 + (40 * i)), 0.35f, Color.FromArgb(fullAlpha, Colors.White), Font.ChaletLondon, Alignment.Right).Draw();
+                new UIResText(text, new PointF((int)Resolution.Width - SafeSize.X - (506 + _add), SafeSize.Y + 260 + 42 + (40 * i)), 0.35f, Color.FromArgb(fullAlpha, Colors.White)).Draw();
+                new UIResText(label, new PointF((int)Resolution.Width - SafeSize.X - (6 + _add), SafeSize.Y + 260 + 42 + (40 * i)), 0.35f, Color.FromArgb(fullAlpha, Colors.White), Font.ChaletLondon, Alignment.Right).Draw();
             }
 
             if (!string.IsNullOrEmpty(Heists[Index].Description))
             {
                 var propLen = Heists[Index].ValueList.Count;
-                new UIResRectangle(new PointF((int)Resolution.Width - SafeSize.X - 512, SafeSize.Y + 256 + 42 + 40 * propLen),
+                new UIResRectangle(new PointF((int)Resolution.Width - SafeSize.X - (512 + _add), SafeSize.Y + 256 + 42 + 40 * propLen),
                     new SizeF(512, 2), Color.FromArgb(fullAlpha, Colors.White)).Draw();
                 new UIResText(Heists[Index].Description,
-                    new PointF((int)Resolution.Width - SafeSize.X - 508, SafeSize.Y + 256 + 45 + 40 * propLen + 4), 0.35f,
-                    Color.FromArgb(fullAlpha, Colors.White)) { Wrap = 508 }.Draw();
-                new UIResRectangle(new PointF((int)Resolution.Width - SafeSize.X - 512, SafeSize.Y + 256 + 44 + 40 * propLen),
+                    new PointF((int)Resolution.Width - SafeSize.X - (508 + _add), SafeSize.Y + 256 + 45 + 40 * propLen + 4), 0.35f,
+                    Color.FromArgb(fullAlpha, Colors.White)) { Wrap = (508 + _add) }.Draw();
+                new UIResRectangle(new PointF((int)Resolution.Width - SafeSize.X - (512 + _add), SafeSize.Y + 256 + 44 + 40 * propLen),
                     new SizeF(512, 45 * (int)(ScreenTools.GetTextWidth(Heists[Index].Description, Font.ChaletLondon, 0.35f) / 500)),
                     Color.FromArgb(blackAlpha, 0, 0, 0)).Draw();
             }

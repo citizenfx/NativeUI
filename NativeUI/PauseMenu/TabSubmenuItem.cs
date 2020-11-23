@@ -147,6 +147,10 @@ namespace NativeUI.PauseMenu
             Items[Index].SafeSize = SafeSize.AddPoints(new PointF((int)activeWidth - submenuWidth, 0));
             Items[Index].TopLeft = SafeSize.AddPoints(new PointF((int)activeWidth - submenuWidth, 0));
             Items[Index].BottomRight = new PointF((int)Resolution.Width - SafeSize.X, (int)Resolution.Height - SafeSize.Y);
+            if (Items[Index] is TabMissionSelectItem it)
+            {
+                it._add = -420;
+            }
             Items[Index].Draw();
         }
     }
