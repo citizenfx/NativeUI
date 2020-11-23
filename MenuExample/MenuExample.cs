@@ -263,7 +263,7 @@ public class MenuExample : BaseScript
 			new UIMenuCheckboxItem("Item 2", true),
 			new UIMenuListItem("Item 3", new List<dynamic>(){"Item1", 2, 3.0999 }, 0),
 			new UIMenuSliderItem("Item 4", "", true),
-			new UIMenuSliderProgressItem("Item 4", 20, 0),
+			new UIMenuSliderProgressItem("Item 5", 20, 0),
 		};
 
 		TabInteractiveListItem Item4 = new TabInteractiveListItem("TabInteractiveListItem", items);
