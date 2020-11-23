@@ -263,7 +263,6 @@ namespace NativeUI.PauseMenu
                 {
                     var yoffset = 15;
                     var basePos = SafeSize.AddPoints(new PointF(BottomRight.X - SafeSize.X - 210, yoffset + (itemSize.Height + 3) * i));
-                    Debug.WriteLine("I = " + i + ", basePos = " + basePos);
                     sliderItem._rectangleBackground.Position = basePos;
                     sliderItem._rectangleBackground.Size = new SizeF(200f, 10);
 
