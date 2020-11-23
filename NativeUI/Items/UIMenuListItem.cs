@@ -8,12 +8,12 @@ namespace NativeUI
 {
     public class UIMenuListItem : UIMenuItem, IListItem
     {
-        protected UIResText _itemText;
-        protected Sprite _arrowLeft;
-        protected Sprite _arrowRight;
+        protected internal UIResText _itemText;
+        protected internal Sprite _arrowLeft;
+        protected internal Sprite _arrowRight;
 
-        protected int _index;
-        protected List<dynamic> _items;
+        protected internal int _index;
+        protected internal List<dynamic> _items;
 
 
         /// <summary>

@@ -6,23 +6,23 @@ namespace NativeUI
 {
 	public class UIMenuSliderItem : UIMenuItem
 	{
-		protected Sprite _arrowLeft;
-		protected Sprite _arrowRight;
+		protected internal Sprite _arrowLeft;
+		protected internal Sprite _arrowRight;
 
-		protected UIResRectangle _rectangleBackground;
-		protected UIResRectangle _rectangleSlider;
-		protected UIResRectangle _rectangleDivider;
+		protected internal UIResRectangle _rectangleBackground;
+		protected internal UIResRectangle _rectangleSlider;
+		protected internal UIResRectangle _rectangleDivider;
 
-		protected int _value = 0;
-		protected int _max = 100;
-		protected int _multiplier = 5;
+		protected internal int _value = 0;
+		protected internal int _max = 100;
+		protected internal int _multiplier = 5;
 
 
 		/// <summary>
 		/// Triggered when the slider is changed.
 		/// </summary>
 		public event ItemSliderEvent OnSliderChanged;
-
+		public bool Divider;
 
 		/// <summary>
 		/// The maximum value of the slider.
@@ -59,7 +59,7 @@ namespace NativeUI
 					_value = 0;
 				else
 					_value = value;
-				SliderChanged();
+				SliderChanged(_value);
 			}
 		}
 		/// <summary>
@@ -114,14 +114,11 @@ namespace NativeUI
 			_arrowRight = new Sprite("commonmenutu", "arrowright", new Point(0, 105 + y), new Size(15, 15));
 			_rectangleBackground = new UIResRectangle(new Point(0, 0), new Size(150, 9), Color.FromArgb(255, 4, 32, 57));
 			_rectangleSlider = new UIResRectangle(new Point(0, 0), new Size(75, 9), Color.FromArgb(255, 57, 116, 200));
-			if (divider)
-			{
+			Divider = divider;
+			if (Divider)
 				_rectangleDivider = new UIResRectangle(new Point(0, 0), new Size(2, 20), Colors.WhiteSmoke);
-			}
 			else
-			{
 				_rectangleDivider = new UIResRectangle(new Point(0, 0), new Size(2, 20), Color.Transparent);
-			}
 		}
 
 		/// <summary>
@@ -154,18 +151,14 @@ namespace NativeUI
 				_arrowLeft.Draw();
 				_arrowRight.Draw();
 			}
-			else
-			{
-
-			}
 			_rectangleBackground.Draw();
 			_rectangleSlider.Draw();
 			_rectangleDivider.Draw();
 		}
 
-		internal virtual void SliderChanged()
+		internal virtual void SliderChanged(int value)
 		{
-			OnSliderChanged?.Invoke(this, Value);
+			OnSliderChanged?.Invoke(this, value);
 		}
 	}
 }

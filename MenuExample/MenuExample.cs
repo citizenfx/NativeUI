@@ -130,6 +130,8 @@ public class MenuExample : BaseScript
 		var colorListItem = new UIMenuListItem("Colored ListItem.. Really?", foods, 0, "~b~Look!!~r~I can be colored ~y~too!!~w~", Color.FromArgb(150, 185, 230, 185), Color.FromArgb(170, 174, 219, 242));
 		menu.AddItem(colorListItem);
 
+		var Slider = new UIMenuSliderItem("Slider Item", "Cool!", true); // by default max is 100 and multipler 5 = 20 steps.
+		menu.AddItem(Slider);
 
 		var SliderProgress = new UIMenuSliderProgressItem("Slider Progress Item", 10, 0);
 		menu.AddItem(SliderProgress);
@@ -259,7 +261,9 @@ public class MenuExample : BaseScript
 		{
 			new UIMenuItem("Item 1"),
 			new UIMenuCheckboxItem("Item 2", true),
-			new UIMenuListItem("Item 3", new List<dynamic>(){"Item1", 2, 3.0999 }, 0)
+			new UIMenuListItem("Item 3", new List<dynamic>(){"Item1", 2, 3.0999 }, 0),
+			new UIMenuSliderItem("Item 4", "", true),
+			new UIMenuSliderProgressItem("Item 5", 20, 0),
 		};
 
 		TabInteractiveListItem Item4 = new TabInteractiveListItem("TabInteractiveListItem", items);
@@ -289,6 +293,6 @@ public class MenuExample : BaseScript
 		Item1.Focused = true;
 		Item1.Visible = true;
 		MenuContainer.Visible = true;
-		// items have events exaclty the same as UIMenuItems and you can handle TabInteractiveListItem items just like that
+		// items have events exactly the same as UIMenuItems and you can handle TabInteractiveListItem items just like that
 	}
 }
