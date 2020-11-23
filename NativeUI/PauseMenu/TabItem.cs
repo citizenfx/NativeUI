@@ -48,14 +48,13 @@ namespace NativeUI.PauseMenu
         {
             if (!Visible) return;
 
-            var res = ScreenTools.ResolutionMaintainRatio;
 
             if (UseDynamicPositionment)
             {
                 SafeSize = new PointF(300, 240);
 
                 TopLeft = new PointF(SafeSize.X, SafeSize.Y);
-                BottomRight = new PointF((int)res.Width - SafeSize.X, (int)res.Height - SafeSize.Y);
+                BottomRight = new PointF((int)Resolution.Width - SafeSize.X, (int)Resolution.Height - SafeSize.Y);
             }
 
             var rectSize = new SizeF(BottomRight.SubtractPoints(TopLeft));
