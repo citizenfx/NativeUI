@@ -238,7 +238,7 @@ public class MenuExample : BaseScript
 		string Txd = API.GetPedheadshotTxdString(mugshot);
 
 		MenuContainer.Photo = new NativeUI.Sprite(Txd, Txd, PointF.Empty, SizeF.Empty); // Position and size can be empty.. they'll be handled by the TabView
-		//this will add our player smugshot to the pause menu
+																						//this will add our player smugshot to the pause menu
 		MenuContainer.Money = "1000"; // if money and moneySubtitle are empty or not used, the current datetime will be printed
 		MenuContainer.MoneySubtitle = "Bank = 10";
 
@@ -267,7 +267,25 @@ public class MenuExample : BaseScript
 		};
 
 		TabInteractiveListItem Item4 = new TabInteractiveListItem("TabInteractiveListItem", items);
-
+		List<MissionInformation> info = new List<MissionInformation>()
+		{
+			new MissionInformation("Mission 1", new List<Tuple<string, string>>()
+			{
+				new Tuple<string, string>("item 1", "description 1"),
+				new Tuple<string, string>("item 2", "description 2"),
+				new Tuple<string, string>("item 3", "description 3"),
+				new Tuple<string, string>("item 4", "description 4"),
+				new Tuple<string, string>("item 5", "description 5"),
+			}),
+			new MissionInformation("Mission 2", new List<Tuple<string, string>>()
+			{
+				new Tuple<string, string>("item 1", "description 1"),
+				new Tuple<string, string>("item 2", "description 2"),
+				new Tuple<string, string>("item 3", "description 3"),
+				new Tuple<string, string>("item 4", "description 4"),
+				new Tuple<string, string>("item 5", "description 5"),
+			}),
+		};
 		TabSubmenuItem Item5 = new TabSubmenuItem("TabSubmenuItem", new List<TabItem>()
 		{
 			new TabItem("simple TabItem"),
@@ -281,13 +299,17 @@ public class MenuExample : BaseScript
 				["Item 5"] = "subItem 5",
 				["Item 6"] = "subItem 6"
 			}),
+			new TabMissionSelectItem("Mission tab", info),
 			new TabInteractiveListItem("TabInteractiveListItem", items)
 		});
+		TabMissionSelectItem Item6 = new TabMissionSelectItem("Mission tab", info);
+
 		MenuContainer.AddTab(Item1);
 		MenuContainer.AddTab(Item2);
 		MenuContainer.AddTab(Item3);
 		MenuContainer.AddTab(Item4);
 		MenuContainer.AddTab(Item5);
+		MenuContainer.AddTab(Item6);
 		// this way we can choose which tab is the defualt one
 		Item1.Active = true;
 		Item1.Focused = true;
