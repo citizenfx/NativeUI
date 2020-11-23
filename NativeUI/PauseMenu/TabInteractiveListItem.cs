@@ -261,15 +261,16 @@ namespace NativeUI.PauseMenu
                 }
                 else if (Items[c] is UIMenuSliderItem sliderItem)
                 {
-                    var yoffset = 5;
-                    var basePos = SafeSize.AddPoints(new PointF(BottomRight.X - SafeSize.X - 210, yoffset + (itemSize.Height + 6.5f) * i));
+                    var yoffset = 15;
+                    var basePos = SafeSize.AddPoints(new PointF(BottomRight.X - SafeSize.X - 210, yoffset + (itemSize.Height + 3) * i));
+                    Debug.WriteLine("I = " + i + ", basePos = " + basePos);
                     sliderItem._rectangleBackground.Position = basePos;
                     sliderItem._rectangleBackground.Size = new SizeF(200f, 10);
 
                     sliderItem._rectangleSlider.Position = basePos;
                     sliderItem._rectangleSlider.Size = new SizeF(100f, 10);
 
-                    sliderItem._rectangleDivider.Position = SafeSize.AddPoints(new PointF(BottomRight.X - SafeSize.X - 110, yoffset + (itemSize.Height + 5f) * i));
+                    sliderItem._rectangleDivider.Position = SafeSize.AddPoints(new PointF(BottomRight.X - SafeSize.X - 110, (yoffset - 5) + (itemSize.Height + 3) * i));
                     sliderItem._rectangleDivider.Size = new SizeF(2, 20);
                     if (sliderItem.Divider)
                         sliderItem._rectangleDivider.Color = Colors.WhiteSmoke;
@@ -283,14 +284,14 @@ namespace NativeUI.PauseMenu
                 }
                 else if (Items[c] is UIMenuSliderProgressItem sliderProgressItem)
                 {
-                    var yoffset = 5;
-                    var basePos = SafeSize.AddPoints(new PointF(BottomRight.X - SafeSize.X - 210, yoffset + (itemSize.Height + 6.5f) * i));
+                    var yoffset = 15;
+                    var basePos = SafeSize.AddPoints(new PointF(BottomRight.X - SafeSize.X - 210, yoffset + (itemSize.Height + 3) * i));
                     sliderProgressItem._rectangleBackground.Position = basePos;
                     sliderProgressItem._rectangleBackground.Size = new SizeF(200, 10);
 
                     sliderProgressItem._rectangleSlider.Position = basePos;
 
-                    sliderProgressItem._rectangleDivider.Position = SafeSize.AddPoints(new PointF(BottomRight.X - SafeSize.X - 100, yoffset + (itemSize.Height + 5f) * i));
+                    sliderProgressItem._rectangleDivider.Position = SafeSize.AddPoints(new PointF(BottomRight.X - SafeSize.X - 100, (yoffset - 5) + (itemSize.Height + 3f) * i));
                     sliderProgressItem._rectangleDivider.Size = new SizeF(2, 20);
 
                     if (sliderProgressItem.Divider)
