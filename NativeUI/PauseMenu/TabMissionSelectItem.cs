@@ -153,11 +153,8 @@ namespace NativeUI.PauseMenu
             var alpha = Focused ? 120 : 30;
             var blackAlpha = Focused ? 200 : 100;
             var fullAlpha = Focused ? 255 : 150;
-            Debug.WriteLine("_add = " + _add);
             var activeWidth = Resolution.Width - SafeSize.X * 2;
             var itemSize = new SizeF((int)activeWidth - (_add + 515), 40);
-            Debug.WriteLine("itemsize = " + itemSize);
-            Debug.WriteLine("activeWidth = " + activeWidth);
             var counter = 0;
             for (int i = _minItem; i < Math.Min(Heists.Count, _maxItem); i++)
             {
