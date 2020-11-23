@@ -12,7 +12,7 @@ namespace NativeUI
 
 	public class UIMenuCheckboxItem : UIMenuItem
     {
-        protected Sprite _checkedSprite;
+        protected internal Sprite _checkedSprite;
 
         /// <summary>
         /// Triggered when the checkbox state is changed.
