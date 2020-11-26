@@ -230,13 +230,17 @@ public class MenuExample : BaseScript
 
 	public async void OpenCustomPauseMenu()
 	{
-		TabView MenuContainer = new TabView("This is the title", "Subtitle");
-		MenuContainer.SideStringTop = "Player_Name";
-		MenuContainer.SideStringMiddle = "Middle_String";
-		MenuContainer.SideStringBottom = "Bottom_string";
-		MenuContainer.DisplayHeader = true;
+		TabView MenuContainer = new TabView("This is the title");
 		_menuPool.AddPauseMenu(MenuContainer);
 
+		int mugshot = API.RegisterPedheadshot(API.PlayerPedId());
+		while (!API.IsPedheadshotReady(mugshot)) await BaseScript.Delay(1);
+		string Txd = API.GetPedheadshotTxdString(mugshot);
+
+		MenuContainer.Photo = new NativeUI.Sprite(Txd, Txd, PointF.Empty, SizeF.Empty); // Position and size can be empty.. they'll be handled by the TabView
+																						//this will add our player smugshot to the pause menu
+		MenuContainer.Money = "1000"; // if money and moneySubtitle are empty or not used, the current datetime will be printed
+		MenuContainer.MoneySubtitle = "Bank = 10";
 
 		TabItem Item1 = new TabItem("simple TabItem");
 

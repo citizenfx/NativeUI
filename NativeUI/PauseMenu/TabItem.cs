@@ -51,7 +51,7 @@ namespace NativeUI.PauseMenu
 
             if (UseDynamicPositionment)
             {
-                SafeSize = new PointF(300, Parent.SubTitle != null && Parent.SubTitle != "" ? 255 : 245);
+                SafeSize = new PointF(300, 240);
 
                 TopLeft = new PointF(SafeSize.X, SafeSize.Y);
                 BottomRight = new PointF((int)Resolution.Width - SafeSize.X, (int)Resolution.Height - SafeSize.Y);
@@ -74,8 +74,8 @@ namespace NativeUI.PauseMenu
 
                 for (int i = 0; i < cols * fils; i++)
                 {
-                    RockstarTile.Position = TopLeft.AddPoints(new PointF(titleSize * (i % (int)cols), titleSize * i / (int)cols));
-                    RockstarTile.Color = Color.FromArgb((int)MiscExtensions.LinearFloatLerp(20, 0, i / (int)cols, fils), 255, 255, 255);
+                    RockstarTile.Position = TopLeft.AddPoints(new PointF(titleSize * (i % cols), titleSize * (i / cols)));
+                    RockstarTile.Color = Color.FromArgb((int)MiscExtensions.LinearFloatLerp(40, 0, i / (int)cols, fils), 255, 255, 255);
                     RockstarTile.Draw();
                 }
             }

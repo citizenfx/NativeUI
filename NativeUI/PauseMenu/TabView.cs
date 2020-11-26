@@ -13,23 +13,6 @@ namespace NativeUI.PauseMenu
         public TabView(string title)
         {
             Title = title;
-            SubTitle = "";
-            SideStringTop  = "";
-            SideStringMiddle  = "";
-            SideStringBottom  = "";
-            Tabs = new List<TabItem>();
-            Index = 0;
-            Name = Game.Player.Name;
-            TemporarilyHidden = false;
-            CanLeave = true;
-        }
-        public TabView(string title, string subtitle)
-        {
-            Title = title;
-            SubTitle = subtitle;
-            SideStringTop = "";
-            SideStringMiddle = "";
-            SideStringBottom = "";
             Tabs = new List<TabItem>();
             Index = 0;
             Name = Game.Player.Name;
@@ -38,11 +21,6 @@ namespace NativeUI.PauseMenu
         }
 
         public string Title { get; set; }
-        public string SubTitle { get; set; }
-        public string SideStringTop { get; set; }
-        public string SideStringMiddle { get; set; }
-        public string SideStringBottom { get; set; }
-        public Tuple<string, string> HeaderPicture { internal get; set; }
         public Sprite Photo { get; set; }
         public string Name { get; set; }
         public string Money { get; set; }
@@ -52,10 +30,9 @@ namespace NativeUI.PauseMenu
         public bool TemporarilyHidden { get; set; }
         public bool CanLeave { get; set; }
         public bool HideTabs { get; set; }
-        public bool DisplayHeader = true;
-        
+
         protected readonly SizeF Resolution = ScreenTools.ResolutionMaintainRatio;
-        internal bool _loaded;
+
         internal readonly static string _browseTextLocalized = Game.GetGXTEntry("HUD_INPUT1C");
 
         public event EventHandler OnMenuClose;
@@ -90,7 +67,6 @@ namespace NativeUI.PauseMenu
         private bool _visible;
 
         private Scaleform _sc;
-        private Scaleform _header;
         public void ShowInstructionalButtons()
         {
             if (_sc == null)
@@ -110,37 +86,6 @@ namespace NativeUI.PauseMenu
             _sc.CallFunction("SET_DATA_SLOT", 3, API.GetControlInstructionalButton(2, (int)Control.FrontendLb, 0), _browseTextLocalized);
         }
 
-        public async void ShowHeader()
-		{
-            if (_header == null)
-                _header = new Scaleform("pause_menu_header");
-            while (!_header.IsLoaded) await BaseScript.Delay(0);
-            if (String.IsNullOrEmpty(SubTitle) || String.IsNullOrWhiteSpace(SubTitle))
-                _header.CallFunction("SET_HEADER_TITLE", Title);
-            else
-            {
-                _header.CallFunction("SET_HEADER_TITLE", Title, false, SubTitle);
-                _header.CallFunction("SHIFT_CORONA_DESC", true);
-            }
-            if (HeaderPicture != null)
-                _header.CallFunction("SET_CHAR_IMG", HeaderPicture.Item1, HeaderPicture.Item2, true);
-            else
-			{
-                int mugshot = API.RegisterPedheadshot(API.PlayerPedId());
-                while (!API.IsPedheadshotReady(mugshot)) await BaseScript.Delay(1);
-                string Txd = API.GetPedheadshotTxdString(mugshot);
-                HeaderPicture = new Tuple<string, string>(Txd, Txd);
-                API.ReleasePedheadshotImgUpload(mugshot);
-                _header.CallFunction("SET_CHAR_IMG", HeaderPicture.Item1, HeaderPicture.Item2, true);
-            }
-            _header.CallFunction("SET_HEADING_DETAILS", SideStringTop, SideStringMiddle, SideStringBottom, false);
-            _header.CallFunction("BUILD_MENU");
-            _header.CallFunction("adjustHeaderPositions");
-            _header.CallFunction("SHOW_HEADING_DETAILS", true);
-            _header.CallFunction("SHOW_MENU", true);
-            _loaded = true;
-        }
-
         public void DrawInstructionalButton(int slot, Control control, string text)
         {
             _sc.CallFunction("SET_DATA_SLOT", slot, API.GetControlInstructionalButton(2, (int)control, 0), text);
@@ -151,7 +96,7 @@ namespace NativeUI.PauseMenu
             if (!Visible || TemporarilyHidden) return;
             API.DisableAllControlActions(0);
 
-            if (Game.IsControlJustPressed(2, Control.PhoneLeft) && FocusLevel == 0)
+            if (Game.IsControlJustPressed(0, Control.PhoneLeft) && FocusLevel == 0)
             {
                 Tabs[Index].Active = false;
                 Tabs[Index].Focused = false;
@@ -164,7 +109,7 @@ namespace NativeUI.PauseMenu
                 Game.PlaySound("NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET");
             }
 
-            else if (Game.IsControlJustPressed(2, Control.PhoneRight) && FocusLevel == 0)
+            else if (Game.IsControlJustPressed(0, Control.PhoneRight) && FocusLevel == 0)
             {
                 Tabs[Index].Active = false;
                 Tabs[Index].Focused = false;
@@ -177,7 +122,7 @@ namespace NativeUI.PauseMenu
                 Game.PlaySound("NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET");
             }
 
-            else if (Game.IsControlJustPressed(2, Control.FrontendAccept) && FocusLevel == 0)
+            else if (Game.IsControlJustPressed(0, Control.FrontendAccept) && FocusLevel == 0)
             {
                 if (Tabs[Index].CanBeFocused)
                 {
@@ -195,28 +140,25 @@ namespace NativeUI.PauseMenu
 
             }
 
-            else if (Game.IsControlJustPressed(2, Control.PhoneCancel))
+            else if (Game.IsControlJustPressed(0, Control.PhoneCancel) && FocusLevel == 1)
             {
-                if (FocusLevel == 1)
-                {
-                    Tabs[Index].Focused = false;
-                    FocusLevel = 0;
-                    Game.PlaySound("BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET");
-                }
-                else if (FocusLevel == 0 && CanLeave)
-				{
-                    Visible = false;
-                    Game.PlaySound("BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET");
-                    OnMenuClose?.Invoke(this, EventArgs.Empty);
-                    _loaded = false;
-                    _header.CallFunction("REMOVE_MENU", true);
-                    _header.Dispose();
-                    _header = null;
-                }
+                Tabs[Index].Focused = false;
+                FocusLevel = 0;
+
+                Game.PlaySound("BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+            }
+
+            else if (Game.IsControlJustPressed(0, Control.PhoneCancel) && FocusLevel == 0 && CanLeave)
+            {
+                Visible = false;
+                Game.PlaySound("BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+
+                OnMenuClose?.Invoke(this, EventArgs.Empty);
             }
 
             if (!HideTabs)
             {
+
                 if (Game.IsControlJustPressed(0, Control.FrontendLb))
                 {
                     Tabs[Index].Active = false;
@@ -275,10 +217,9 @@ namespace NativeUI.PauseMenu
             API.ShowCursorThisFrame();
 
 
-            var safe = new PointF(300, SubTitle != null && SubTitle != ""? 205 : 195);
+            var safe = new PointF(300, 180);
             if (!HideTabs)
             {
-                /*
                 new UIResText(Title, new PointF(safe.X, safe.Y - 80), 1f, Colors.White, Font.ChaletComprimeCologne, Alignment.Left)
                 {
                     Shadow = true,
@@ -322,12 +263,12 @@ namespace NativeUI.PauseMenu
                 {
                     Shadow = true,
                 }.Draw();
-                */
+
                 for (int i = 0; i < Tabs.Count; i++)
                 {
                     var activeSize = Resolution.Width - 2 * safe.X;
                     activeSize -= 5;
-                    float tabWidth = ((int)activeSize / Tabs.Count) - 1.95f;
+                    int tabWidth = (int)activeSize / Tabs.Count;
                     Game.EnableControlThisFrame(0, Control.CursorX);
                     Game.EnableControlThisFrame(0, Control.CursorY);
 
@@ -339,7 +280,7 @@ namespace NativeUI.PauseMenu
                     if (Tabs[i].Active)
                         new UIResRectangle(safe.SubtractPoints(new PointF(-((tabWidth + 5) * i), 10)), new SizeF(tabWidth, 10), Colors.DodgerBlue).Draw();
 
-                    new UIResText(Tabs[i].Title.ToUpper(), safe.AddPoints(new PointF((tabWidth / 2) + (tabWidth + 5) * i, 5)), 0.3f, Tabs[i].Active ? Colors.Black : Colors.White, Font.ChaletLondon, Alignment.Center).Draw();
+                    new UIResText(Tabs[i].Title.ToUpper(), safe.AddPoints(new PointF((tabWidth / 2) + (tabWidth + 5) * i, 5)), 0.35f, Tabs[i].Active ? Colors.Black : Colors.White, Font.ChaletLondon, Alignment.Center).Draw();
 
                     if (hovering && Game.IsControlJustPressed(0, Control.CursorAccept) && !Tabs[i].Active)
                     {
@@ -364,13 +305,8 @@ namespace NativeUI.PauseMenu
             Tabs[Index].Draw();
 
             _sc.CallFunction("DRAW_INSTRUCTIONAL_BUTTONS", -1);
+
             _sc.Render2D();
-			if (DisplayHeader)
-			{
-                if(!_loaded)
-                    ShowHeader();
-                API.DrawScaleformMovie(_header.Handle, 0.501f, 0.162f, 0.6782f, 0.145f, 255, 255, 255, 255, 0);
-            }
         }
     }
 
