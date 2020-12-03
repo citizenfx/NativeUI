@@ -886,6 +886,7 @@ namespace NativeUI
 		internal readonly static string _selectTextLocalized = Game.GetGXTEntry("HUD_INPUT2");
 		internal readonly static string _backTextLocalized = Game.GetGXTEntry("HUD_INPUT3");
 		protected readonly SizeF Resolution = ScreenTools.ResolutionMaintainRatio;
+		protected internal int _pressingTimer = 0;
 		#endregion
 
 		#region Public Fields
@@ -2128,30 +2129,46 @@ namespace NativeUI
 			if (MenuItems.Count == 0) return;
 			if (IsControlBeingPressed(MenuControls.Up, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
-				if (Size > MaxItemsOnScreen + 1)
-					GoUpOverflow();
-				else
-					GoUp();
-				UpdateScaleform();
+				if (API.GetGameTimer() - _pressingTimer > 175)
+				{
+					if (Size > MaxItemsOnScreen + 1)
+						GoUpOverflow();
+					else
+						GoUp();
+					UpdateScaleform();
+					_pressingTimer = API.GetGameTimer();
+				}
 			}
 
 			else if (IsControlBeingPressed(MenuControls.Down, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
-				if (Size > MaxItemsOnScreen + 1)
-					GoDownOverflow();
-				else
-					GoDown();
-				UpdateScaleform();
+				if (API.GetGameTimer() - _pressingTimer > 175)
+				{
+					if (Size > MaxItemsOnScreen + 1)
+						GoDownOverflow();
+					else
+						GoDown();
+					UpdateScaleform();
+					_pressingTimer = API.GetGameTimer();
+				}
 			}
 
 			else if (IsControlBeingPressed(MenuControls.Left, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
-				GoLeft();
+				if (API.GetGameTimer() - _pressingTimer > 175)
+				{
+					GoLeft();
+					_pressingTimer = API.GetGameTimer();
+				}
 			}
 
 			else if (IsControlBeingPressed(MenuControls.Right, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
 			{
-				GoRight();
+				if (API.GetGameTimer() - _pressingTimer > 175)
+				{
+					GoRight();
+					_pressingTimer = API.GetGameTimer();
+				}
 			}
 
 			else if (HasControlJustBeenPressed(MenuControls.Select, key) && API.UpdateOnscreenKeyboard() != 0 && !API.IsWarningMessageActive())
