@@ -1584,6 +1584,7 @@ namespace NativeUI
 				if (!Children.ContainsKey(MenuItems[CurrentSelection])) return;
 				Visible = false;
 				Children[MenuItems[CurrentSelection]].Visible = true;
+				Children[MenuItems[CurrentSelection]].MouseEdgeEnabled = MouseEdgeEnabled;
 				MenuChangeEv(Children[MenuItems[CurrentSelection]], true);
 			}
 		}
