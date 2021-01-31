@@ -1584,6 +1584,7 @@ namespace NativeUI
 				if (!Children.ContainsKey(MenuItems[CurrentSelection])) return;
 				Visible = false;
 				Children[MenuItems[CurrentSelection]].Visible = true;
+				Children[MenuItems[CurrentSelection]].MouseEdgeEnabled = MouseEdgeEnabled;
 				MenuChangeEv(Children[MenuItems[CurrentSelection]], true);
 			}
 		}
@@ -2235,7 +2236,6 @@ namespace NativeUI
 				_itemsDirty = value;
 				UpdateScaleform();
 				if (ParentMenu != null || !value) return;
-				MouseEdgeEnabled = ParentMenu.MouseEdgeEnabled;
 				if (!ResetCursorOnOpen) return;
 				API.SetCursorLocation(float.Parse(Screen.Resolution.Width.ToString()) / 2f, float.Parse(Screen.Resolution.Height.ToString()) / 2f);
 				Screen.Hud.CursorSprite = CursorSprite.Normal;
