@@ -32,10 +32,6 @@ namespace NativeUI
         public List<Control> KeyboardButtons { get; private set; }
         public PadCheck PadCheck { get; private set; }
 
-        private readonly string _buttonString;
-        private readonly Control _buttonControl;
-        private readonly bool _usingControls;
-
         /// <summary>
         /// Add a dynamic button to the instructional buttons array.
         /// Changes whether the controller is being used and changes depending on keybinds.
@@ -172,7 +168,6 @@ namespace NativeUI
             {
                 if (!value)
                 {
-                    ControlButtons.Clear();
                     _sc.CallFunction("CLEAR_ALL");
                     _sc.CallFunction("CLEAR_RENDER");
                 }
@@ -270,7 +265,6 @@ namespace NativeUI
         internal void UpdateButtons()
         {
             if (!_changed) return;
-            _sc.CallFunction("CLEAR_ALL");
             _sc.CallFunction("TOGGLE_MOUSE_BUTTONS", _useMouseButtons);
             int count = 0;
 
@@ -324,7 +318,7 @@ namespace NativeUI
 
         internal void HandleScaleform()
         {
-            if (_sc == null) return;
+            if (_sc == null || !_enabled) return;
             if ((ControlButtons == null || ControlButtons.Count == 0) && !_isSaving) return;
             if (API.IsUsingKeyboard(2))
             {
