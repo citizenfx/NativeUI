@@ -78,6 +78,7 @@
     <Compile Include="PauseMenu\TabView.cs" />
     <Compile Include="PointExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scaleforms\MediumMessage\MediumMessage.cs" />
     <Compile Include="Scaleforms\PopupWarning\PopupWarning.cs" />
     <Compile Include="ScreenTools.cs" />
     <Compile Include="StringMeasurer.cs" />
