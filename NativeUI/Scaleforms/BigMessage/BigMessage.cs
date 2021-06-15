@@ -23,12 +23,12 @@ namespace NativeUI
             _sc = new Scaleform("MP_BIG_MESSAGE_FREEMODE");
             var timeout = 1000;
             var start = DateTime.Now;
-            while (!API.HasScaleformMovieLoaded(_sc.Handle) && DateTime.Now.Subtract(start).TotalMilliseconds < timeout) await BaseScript.Delay(0);
+            while (!_sc.IsLoaded && DateTime.Now.Subtract(start).TotalMilliseconds < timeout) await BaseScript.Delay(0);
         }
 
         public void Dispose()
         {
-            Function.Call(Hash.SET_SCALEFORM_MOVIE_AS_NO_LONGER_NEEDED, new OutputArgument(_sc.Handle));
+            _sc.Dispose();
             _sc = null;
         }
 
@@ -122,6 +122,7 @@ namespace NativeUI
         private async Task BigMessageThread_Tick()
         {
             MessageInstance.Update();
+            await Task.FromResult(0);
         }
     }
 

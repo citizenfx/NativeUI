@@ -793,6 +793,15 @@ namespace NativeUI
 		//     The ALT modifier key.
 		Alt = 262144
 	}
+
+	public enum MenuState
+	{
+		Opened,
+		Closed,
+		ChangeForward,
+		ChangeBackward
+	}
+
 	public delegate void IndexChangedEvent(UIMenu sender, int newIndex);
 
 	public delegate void ListChangedEvent(UIMenu sender, UIMenuListItem listItem, int newIndex);
@@ -804,12 +813,6 @@ namespace NativeUI
 	public delegate void CheckboxChangeEvent(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked);
 
 	public delegate void ItemSelectEvent(UIMenu sender, UIMenuItem selectedItem, int index);
-
-	public delegate void MenuOpenEvent(UIMenu sender);
-
-	public delegate void MenuCloseEvent(UIMenu sender);
-
-	public delegate void MenuChangeEvent(UIMenu oldMenu, UIMenu newMenu, bool forward);
 
 	public delegate void ItemActivatedEvent(UIMenu sender, UIMenuItem selectedItem);
 
@@ -861,12 +864,10 @@ namespace NativeUI
 		private readonly Dictionary<MenuControls, Tuple<List<Keys>, List<Tuple<Control, int>>>> _keyDictionary =
 			new Dictionary<MenuControls, Tuple<List<Keys>, List<Tuple<Control, int>>>>();
 
-		private readonly List<InstructionalButton> _instructionalButtons = new List<InstructionalButton>();
 		private readonly Sprite _upAndDownSprite;
 		private readonly UIResRectangle _extraRectangleUp;
 		private readonly UIResRectangle _extraRectangleDown;
 
-		private readonly Scaleform _instructionalButtonsScaleform;
 		private readonly Scaleform _menuGlare;
 
 		private readonly int _extraYOffset;
@@ -874,6 +875,7 @@ namespace NativeUI
 		private static readonly MenuControls[] _menuControls = Enum.GetValues(typeof(MenuControls)).Cast<MenuControls>().ToArray();
 
 		private float PanelOffset = 0;
+		internal MenuPool _poolcontainer;
 
 		// Draw Variables
 		private PointF Safe { get; set; }
@@ -916,6 +918,12 @@ namespace NativeUI
 		public string BannerTexture { get; private set; }
 
 		public List<UIMenuHeritageWindow> Windows = new List<UIMenuHeritageWindow>();
+
+		public List<InstructionalButton> InstructionalButtons = new List<InstructionalButton>()
+		{
+			new InstructionalButton(Control.PhoneSelect, _selectTextLocalized),
+			new InstructionalButton(Control.PhoneCancel, _backTextLocalized)
+		};
 
 		#endregion
 
@@ -967,19 +975,9 @@ namespace NativeUI
 		public event ItemSelectEvent OnItemSelect;
 
 		/// <summary>
-		/// Called when user opens the menu.
+		/// Called when user either opens or closes the main menu, clicks on a binded button, goes back to a parent menu.
 		/// </summary>
-		public event MenuOpenEvent OnMenuOpen;
-
-		/// <summary>
-		/// Called when user closes the menu or goes back in a menu chain.
-		/// </summary>
-		public event MenuCloseEvent OnMenuClose;
-
-		/// <summary>
-		/// Called when user either clicks on a binded button or goes back to a parent menu.
-		/// </summary>
-		public event MenuChangeEvent OnMenuChange;
+		public event MenuStateChangeEvent OnMenuStateChanged;
 
 		#endregion
 
@@ -1036,9 +1034,7 @@ namespace NativeUI
 			Children = new Dictionary<UIMenuItem, UIMenu>();
 			WidthOffset = 0;
 			Glare = glare;
-			_instructionalButtonsScaleform = new Scaleform("instructional_buttons");
 			_menuGlare = new Scaleform("mp_menu_glare");
-			UpdateScaleform();
 
 			_mainMenu = new Container(new PointF(0, 0), new SizeF(700, 500), Color.FromArgb(0, 0, 0, 0));
 			BannerSprite = new Sprite(spriteLibrary, spriteName, new PointF(0 + Offset.X, 0 + Offset.Y), new SizeF(431, 100));
@@ -1151,7 +1147,7 @@ namespace NativeUI
 		/// <param name="disable"></param>
 		public void DisableInstructionalButtons(bool disable)
 		{
-			_buttonsEnabled = !disable;
+			InstructionalButtonsHandler.InstructionalButtons.Enabled = !disable;
 		}
 
 		/// <summary>
@@ -1582,10 +1578,14 @@ namespace NativeUI
 				ItemSelect(MenuItems[CurrentSelection], CurrentSelection);
 				MenuItems[CurrentSelection].ItemActivate(this);
 				if (!Children.ContainsKey(MenuItems[CurrentSelection])) return;
-				Visible = false;
 				Children[MenuItems[CurrentSelection]].Visible = true;
 				Children[MenuItems[CurrentSelection]].MouseEdgeEnabled = MouseEdgeEnabled;
-				MenuChangeEv(Children[MenuItems[CurrentSelection]], true);
+				Visible = false;
+				InstructionalButtonsHandler.InstructionalButtons.Enabled = true;
+				InstructionalButtonsHandler.InstructionalButtons.SetInstructionalButtons(Children[MenuItems[CurrentSelection]].InstructionalButtons);
+				_poolcontainer.MenuChangeEv(this, Children[MenuItems[CurrentSelection]], MenuState.ChangeForward);
+				MenuChangeEv(this, Children[MenuItems[CurrentSelection]], MenuState.ChangeForward);
+				Children[MenuItems[CurrentSelection]].MenuChangeEv(this, Children[MenuItems[CurrentSelection]], MenuState.ChangeForward);
 			}
 		}
 
@@ -1596,16 +1596,20 @@ namespace NativeUI
 		public void GoBack()
 		{
 			Game.PlaySound(AUDIO_BACK, AUDIO_LIBRARY);
-			Visible = false;
 			if (ParentMenu != null)
 			{
 				PointF tmp = new PointF(0.5f, 0.5f);
 				ParentMenu.Visible = true;
-				MenuChangeEv(ParentMenu, false);
+				InstructionalButtonsHandler.InstructionalButtons.Enabled = true;
+				InstructionalButtonsHandler.InstructionalButtons.SetInstructionalButtons(ParentMenu.InstructionalButtons);
+				_poolcontainer.MenuChangeEv(this, ParentMenu, MenuState.ChangeBackward);
+				ParentMenu.MenuChangeEv(this, ParentMenu, MenuState.ChangeBackward);
+				MenuChangeEv(this, ParentMenu, MenuState.ChangeBackward);
 				if (ResetCursorOnOpen)
 					API.SetCursorLocation(tmp.X, tmp.Y);
 				//Cursor.Position = tmp;
 			}
+			Visible = false;
 		}
 
 
@@ -1781,14 +1785,16 @@ namespace NativeUI
 			return false;
 		}
 
+		[Obsolete("Use the InstructionalButtonsHandler.InstructionalButtons instead")]
 		public void AddInstructionalButton(InstructionalButton button)
 		{
-			_instructionalButtons.Add(button);
+			//_instructionalButtons.Add(button);
 		}
 
+		[Obsolete("Use the InstructionalButtonsHandler.InstructionalButtons instead")]
 		public void RemoveInstructionalButton(InstructionalButton button)
 		{
-			_instructionalButtons.Remove(button);
+			//_instructionalButtons.Remove(button);
 		}
 
 		#endregion
@@ -1850,19 +1856,9 @@ namespace NativeUI
 		/// </summary>
 		public async Task Draw()
 		{
-			if (!Visible) return;
-
+			if (!Visible || PopupWarningThread.Warning.IsShowing) return;
 			if (ControlDisablingEnabled)
 				Controls.Toggle(false);
-
-			if (_buttonsEnabled)
-			{
-				API.DrawScaleformMovieFullscreen(_instructionalButtonsScaleform.Handle, 255, 255, 255, 255, 0);
-				Screen.Hud.HideComponentThisFrame(HudComponent.VehicleName);
-				Screen.Hud.HideComponentThisFrame(HudComponent.AreaName);
-				Screen.Hud.HideComponentThisFrame(HudComponent.StreetName);
-			}
-			// _instructionalButtonsScaleform.Render2D(); // Bug #13
 
 			if (ScaleWithSafezone)
 			{
@@ -2068,7 +2064,6 @@ namespace NativeUI
 							CurrentSelection = i;
 							Game.PlaySound(AUDIO_UPDOWN, AUDIO_LIBRARY);
 							IndexChange(CurrentSelection);
-							UpdateScaleform();
 						}
 						else if (!uiMenuItem.Enabled && uiMenuItem.Selected)
 						{
@@ -2116,7 +2111,7 @@ namespace NativeUI
 		/// </summary>
 		public void ProcessControl(Keys key = Keys.None)
 		{
-			if (!Visible) return;
+			if (!Visible || PopupWarningThread.Warning.IsShowing) return;
 			if (_justOpened)
 			{
 				_justOpened = false;
@@ -2136,7 +2131,6 @@ namespace NativeUI
 						GoUpOverflow();
 					else
 						GoUp();
-					UpdateScaleform();
 					_pressingTimer = API.GetGameTimer();
 				}
 			}
@@ -2149,7 +2143,6 @@ namespace NativeUI
 						GoDownOverflow();
 					else
 						GoDown();
-					UpdateScaleform();
 					_pressingTimer = API.GetGameTimer();
 				}
 			}
@@ -2193,28 +2186,6 @@ namespace NativeUI
 			}
 		}
 
-		/// <summary>
-		/// Manually update the instructional buttons scaleform.
-		/// </summary>
-		public void UpdateScaleform()
-		{
-			if (!Visible || !_buttonsEnabled) return;
-			_instructionalButtonsScaleform.CallFunction("CLEAR_ALL");
-			_instructionalButtonsScaleform.CallFunction("TOGGLE_MOUSE_BUTTONS", 0);
-			_instructionalButtonsScaleform.CallFunction("CREATE_CONTAINER");
-
-			_instructionalButtonsScaleform.CallFunction("SET_DATA_SLOT", 0, API.GetControlInstructionalButton(2, (int)Control.PhoneSelect, 0), _selectTextLocalized);
-			_instructionalButtonsScaleform.CallFunction("SET_DATA_SLOT", 1, API.GetControlInstructionalButton(2, (int)Control.PhoneCancel, 0), _backTextLocalized);
-
-			int count = 2;
-			foreach (InstructionalButton button in _instructionalButtons.Where(button => button.ItemBind == null || MenuItems[CurrentSelection] == button.ItemBind))
-			{
-				_instructionalButtonsScaleform.CallFunction("SET_DATA_SLOT", count, button.GetButtonId(), button.Text);
-				count++;
-			}
-			_instructionalButtonsScaleform.CallFunction("DRAW_INSTRUCTIONAL_BUTTONS", -1);
-		}
-
 		#endregion
 
 		#region Properties
@@ -2227,15 +2198,25 @@ namespace NativeUI
 			get { return _visible; }
 			set
 			{
-				if (value)
-					MenuOpenEv();
-				else
-					MenuCloseEv();
 				_visible = value;
 				_justOpened = value;
 				_itemsDirty = value;
-				UpdateScaleform();
-				if (ParentMenu != null || !value) return;
+
+				if (ParentMenu != null) return;
+				if (Children[MenuItems[CurrentSelection]].Visible) return;
+				InstructionalButtonsHandler.InstructionalButtons.Enabled = value;
+				InstructionalButtonsHandler.InstructionalButtons.SetInstructionalButtons(InstructionalButtons);
+				if (value)
+				{
+					_poolcontainer.MenuChangeEv(null, this, MenuState.Opened);
+					MenuChangeEv(null, this, MenuState.Opened);
+				}
+				else
+				{
+					_poolcontainer.MenuChangeEv(this, null, MenuState.Closed);
+					MenuChangeEv(this, null, MenuState.Closed);
+				}
+				if (!value) return;
 				if (!ResetCursorOnOpen) return;
 				API.SetCursorLocation(0.5f, 0.5f);
 				Screen.Hud.CursorSprite = CursorSprite.Normal;
@@ -2362,19 +2343,9 @@ namespace NativeUI
 			OnCheckboxChange?.Invoke(this, sender, Checked);
 		}
 
-		protected virtual void MenuOpenEv()
+		protected virtual void MenuChangeEv(UIMenu oldmenu, UIMenu newmenu, MenuState state)
 		{
-			OnMenuOpen?.Invoke(this);
-		}
-
-		protected virtual void MenuCloseEv()
-		{
-			OnMenuClose?.Invoke(this);
-		}
-
-		protected virtual void MenuChangeEv(UIMenu newmenu, bool forward)
-		{
-			OnMenuChange?.Invoke(this, newmenu, forward);
+			OnMenuStateChanged?.Invoke(oldmenu, newmenu, state);
 		}
 
 		#endregion
