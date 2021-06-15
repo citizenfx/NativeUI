@@ -6,6 +6,7 @@ using CitizenFX.Core.UI;
 using NativeUI;
 using NativeUI.PauseMenu;
 using CitizenFX.Core.Native;
+using System.Linq;
 
 public class MenuExample : BaseScript
 {
@@ -88,6 +89,60 @@ public class MenuExample : BaseScript
 			{
 				Screen.ShowNotification("Wow the slider changed! Who do i look like??");
 			}
+		};
+	}
+
+	public void AddScaleformMenu(UIMenu menu)
+	{
+		var scaleformMenu = _menuPool.AddSubMenu(menu, "Scaleforms Showdown");
+		UIMenuItem showSimplePopup = new UIMenuItem("Show PopupWarning example", "You can customize it to your needs");
+		UIMenuItem showPopupButtons = new UIMenuItem("Show PopupWarning with buttons", "It waits until a button has been pressed!");
+		UIMenuListItem customInstr = new UIMenuListItem("SavingNotification", Enum.GetNames(typeof(LoadingSpinnerType)).Cast<dynamic>().ToList(), 0, "InstructionalButtons now give you the ability to dynamically edit, add, remove, customize your buttons, you can even use them outside the menu ~y~without having to run multiple instances of the same scaleform~w~, aren't you happy??");
+		UIMenuItem customInstr2 = new UIMenuItem("Add a random InstructionalButton!", "InstructionalButtons now give you the ability to dynamically edit, add, remove, customize your buttons, you can even use them outside the menu ~y~without having to run multiple instances of the same scaleform~w~, aren't you happy??");
+		scaleformMenu.AddItem(showSimplePopup);
+		scaleformMenu.AddItem(showPopupButtons);
+		scaleformMenu.AddItem(customInstr);
+		scaleformMenu.AddItem(customInstr2);
+
+		scaleformMenu.OnItemSelect += async (sender, item, index) =>
+		{
+			if(item == showSimplePopup)
+			{
+				PopupWarningThread.Warning.ShowWarning("This is the title", "This is the subtitle", "This is the prompt.. you have 6 seconds left", "This is the error message, NativeUI Ver. 3.0");
+				await Delay(1000);
+				for (int i=5; i > -1; i--)
+				{
+					PopupWarningThread.Warning.UpdateWarning("This is the title", "This is the subtitle", $"This is the prompt.. you have {i} seconds left", "This is the error message, NativeUI Ver. 3.0");
+					await Delay(1000);
+				}
+				PopupWarningThread.Warning.Dispose();
+			}
+			else if (item == showPopupButtons)
+			{
+				List<InstructionalButton> buttons = new List<InstructionalButton>()
+				{
+					new InstructionalButton(Control.FrontendAccept, "Accept only with Keyboard", PadCheck.Keyboard),
+					new InstructionalButton(Control.FrontendY, "Cancel only with GamePad", PadCheck.Controller),
+					new InstructionalButton(Control.FrontendX, Control.Detonate, "This will change button if you're using gamepad or keyboard"),
+					new InstructionalButton(new List<Control> { Control.MoveUpOnly, Control.MoveLeftOnly , Control.MoveDownOnly , Control.MoveRightOnly }, "Woow multiple buttons at once??")
+				};
+				PopupWarningThread.Warning.ShowWarningWithButtons("This is the title", "This is the subtitle", "This is the prompt, press any button", buttons, "This is the error message, NativeUI Ver. 3.0");
+				PopupWarningThread.Warning.OnButtonPressed += (button) =>
+				{
+					Debug.WriteLine($"You pressed a Button => {button.Text}");
+				};
+			}
+			else if (item == customInstr2)
+			{
+				if (InstructionalButtonsHandler.InstructionalButtons.ControlButtons.Count >= 6) return;
+				InstructionalButtonsHandler.InstructionalButtons.AddInstructionalButton(new InstructionalButton((Control)new Random().Next(0, 250), "I'm a new button look at me!"));
+			}
+		};
+
+		customInstr.OnListSelected += (item, index) =>
+		{
+			if (InstructionalButtonsHandler.InstructionalButtons.IsSaving) return;
+			InstructionalButtonsHandler.InstructionalButtons.AddSavingText((LoadingSpinnerType)(index + 1), "I'm a saving text", 3000);
 		};
 	}
 
@@ -208,22 +263,48 @@ public class MenuExample : BaseScript
 			submenu.AddItem(new UIMenuItem("PageFiller", "Sample description that takes more than one line. Moreso, it takes way more than two lines since it's so long. Wow, check out this length!"));
 	}
 
+	public void HandleMenuEvents(UIMenu menu)
+	{
+		menu.OnMenuStateChanged += (oldMenu, newMenu, state) =>
+		{
+			if(state == MenuState.Opened)
+			{
+				Debug.WriteLine($"{newMenu.Title.Caption} just opened!");
+			}
+			else if (state == MenuState.ChangeForward)
+			{
+				Debug.WriteLine($"{oldMenu.Title.Caption} => {newMenu.Title.Caption}");
+			}
+			else if (state == MenuState.ChangeBackward)
+			{
+				Debug.WriteLine($"{newMenu.Title.Caption} <= {oldMenu.Title.Caption}");
+			}
+			else if (state == MenuState.Closed)
+			{
+				Debug.WriteLine($"{oldMenu.Title.Caption} just closed!");
+			}
+		};
+	}
+
+
 	public MenuExample()
 	{
 		_menuPool = new MenuPool();
 		var mainMenu = new UIMenu("Native UI", "~b~NATIVEUI SHOWCASE", true); // true means add menu Glare scaleform to the menu
 		_menuPool.Add(mainMenu);
 		HeritageMenu(mainMenu);
+		AddScaleformMenu(mainMenu);
 		AddMenuKetchup(mainMenu);
 		AddMenuFoods(mainMenu);
 		AddMenuCook(mainMenu);
 		AddMenuAnotherMenu(mainMenu);
+		HandleMenuEvents(mainMenu);
 		_menuPool.RefreshIndex();
 
 		Tick += async () =>
 		{
 			_menuPool.ProcessMenus();
-			if (Game.IsControlJustPressed(0, Control.SelectCharacterMichael) && !_menuPool.IsAnyMenuOpen()) // Our menu on/off switch
+			if (Game.IsControlJustPressed(0, Control.SelectCharacterMichael)) // Our menu on/off switch
 				mainMenu.Visible = !mainMenu.Visible;
 		};
 	}
