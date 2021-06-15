@@ -2218,7 +2218,7 @@ namespace NativeUI
 				}
 				if (!value) return;
 				if (!ResetCursorOnOpen) return;
-				API.SetCursorLocation(float.Parse(Screen.Resolution.Width.ToString()) / 2f, float.Parse(Screen.Resolution.Height.ToString()) / 2f);
+				API.SetCursorLocation(0.5f, 0.5f);
 				Screen.Hud.CursorSprite = CursorSprite.Normal;
 			}
 		}
