@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.3218\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.4075\lib\net45\CitizenFX.Core.Client.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BigMessage.cs" />
+    <Compile Include="Scaleforms\BigMessage\BigMessage.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="Elements\Sprite.cs" />
     <Compile Include="Elements\TimerBars.cs" />
@@ -53,7 +53,7 @@
     <Compile Include="Items\UIMenuSliderHeritageItem.cs" />
     <Compile Include="Items\UIMenuSliderItem.cs" />
     <Compile Include="Colors.cs" />
-    <Compile Include="InstructionalButton.cs" />
+    <Compile Include="Scaleforms\Instructional_Buttons\InstructionalButtons.cs" />
     <Compile Include="Items\IListItem.cs" />
     <Compile Include="Items\UIMenuCheckboxItem.cs" />
     <Compile Include="Items\UIMenuColoredItem.cs" />
@@ -78,6 +78,7 @@
     <Compile Include="PauseMenu\TabView.cs" />
     <Compile Include="PointExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scaleforms\PopupWarning\PopupWarning.cs" />
     <Compile Include="ScreenTools.cs" />
     <Compile Include="StringMeasurer.cs" />
     <Compile Include="UIMenu.cs" />
