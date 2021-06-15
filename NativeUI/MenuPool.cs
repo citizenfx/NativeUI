@@ -6,6 +6,9 @@ using Control = CitizenFX.Core.Control;
 
 namespace NativeUI
 {
+
+    public delegate void MenuStateChangeEvent(UIMenu oldMenu, UIMenu newMenu, MenuState state);
+
     /// <summary>
     /// Helper class that handles all of your Menus. After instatiating it, you will have to add your menu by using the Add method.
     /// </summary>
@@ -39,7 +42,12 @@ namespace NativeUI
 
 		public bool OffsetInheritance = true;
 
-		private readonly List<UIMenu> _menuList = new List<UIMenu>();
+        /// <summary>
+		/// Called when user either opens or closes the main menu, clicks on a binded button, goes back to a parent menu.
+        /// </summary>
+        public event MenuStateChangeEvent OnMenuStateChanged;
+
+        private readonly List<UIMenu> _menuList = new List<UIMenu>();
         private readonly List<TabView> _pauseMenus = new List<TabView>();
 
         /// <summary>
@@ -49,6 +57,7 @@ namespace NativeUI
         public void Add(UIMenu menu)
         {
             _menuList.Add(menu);
+            menu._poolcontainer = this;
         }
 
         /// <summary>
@@ -127,9 +136,12 @@ namespace NativeUI
 				submenu.SetBannerType(menu.BannerRectangle);
 			else if (BannerInheritance && menu.BannerSprite != null)
 				submenu.SetBannerType(menu.BannerSprite);
-			Add(submenu);
+            submenu.MouseControlsEnabled = menu.MouseControlsEnabled;
+            submenu.MouseEdgeEnabled = menu.MouseEdgeEnabled;
+            Add(submenu);
 			menu.BindMenuToItem(submenu, item);
-			return submenu;
+            menu._poolcontainer = this;
+            return submenu;
 
 		}
 
@@ -297,6 +309,9 @@ namespace NativeUI
             _menuList.ForEach(m => m.ResetKey(menuControl));
         }
 
-
+        public void MenuChangeEv(UIMenu oldmenu, UIMenu newmenu, MenuState state)
+        {
+            OnMenuStateChanged?.Invoke(oldmenu, newmenu, state);
+        }
     }
 }
