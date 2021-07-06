@@ -1785,13 +1785,13 @@ namespace NativeUI
 			return false;
 		}
 
-		[Obsolete("Use the InstructionalButtonsHandler.InstructionalButtons instead")]
+		[Obsolete("Use InstructionalButtons.Add instead")]
 		public void AddInstructionalButton(InstructionalButton button)
 		{
 			//_instructionalButtons.Add(button);
 		}
 
-		[Obsolete("Use the InstructionalButtonsHandler.InstructionalButtons instead")]
+		[Obsolete("Use InstructionalButtons.Remove instead")]
 		public void RemoveInstructionalButton(InstructionalButton button)
 		{
 			//_instructionalButtons.Remove(button);
