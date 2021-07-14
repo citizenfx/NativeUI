@@ -1785,13 +1785,13 @@ namespace NativeUI
 			return false;
 		}
 
-		[Obsolete("Use the InstructionalButtonsHandler.InstructionalButtons instead")]
+		[Obsolete("Use InstructionalButtons.Add instead")]
 		public void AddInstructionalButton(InstructionalButton button)
 		{
 			//_instructionalButtons.Add(button);
 		}
 
-		[Obsolete("Use the InstructionalButtonsHandler.InstructionalButtons instead")]
+		[Obsolete("Use InstructionalButtons.Remove instead")]
 		public void RemoveInstructionalButton(InstructionalButton button)
 		{
 			//_instructionalButtons.Remove(button);
@@ -2203,7 +2203,7 @@ namespace NativeUI
 				_itemsDirty = value;
 
 				if (ParentMenu != null) return;
-				if (Children[MenuItems[CurrentSelection]].Visible) return;
+				if (Children.ContainsKey(MenuItems[CurrentSelection]) && Children[MenuItems[CurrentSelection]].Visible) return;
 				InstructionalButtonsHandler.InstructionalButtons.Enabled = value;
 				InstructionalButtonsHandler.InstructionalButtons.SetInstructionalButtons(InstructionalButtons);
 				if (value)
