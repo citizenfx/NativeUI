@@ -2203,7 +2203,7 @@ namespace NativeUI
 				_itemsDirty = value;
 
 				if (ParentMenu != null) return;
-				if (Children[MenuItems[CurrentSelection]].Visible) return;
+				if (Children.ContainsKey(MenuItems[CurrentSelection]) && Children[MenuItems[CurrentSelection]].Visible) return;
 				InstructionalButtonsHandler.InstructionalButtons.Enabled = value;
 				InstructionalButtonsHandler.InstructionalButtons.SetInstructionalButtons(InstructionalButtons);
 				if (value)
